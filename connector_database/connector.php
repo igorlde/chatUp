@@ -1,14 +1,24 @@
-<?php 
-$localhost = ""; 
+<?php
+$localhost = "127.0.0.1:3306";
 $usuario = "root";
-$senha = "";
-$banco_de_dados_usado = "banco_chatUp";
+$senha = "G!9fLx@82_Tz%7kR";
+$banco = "banco_chatUp";
 
-// Estabelecendo a conexão
-$conn = mysqli_connect($localhost, $usuario, $senha, $banco_de_dados_usado);
-
-// Verificando se a conexão foi bem-sucedida
-if (!$conn) {
-    die("Erro ao tentar se conectar: " . mysqli_connect_error());
+// Tentativa de conexão
+try {
+    $conn = new mysqli($localhost, $usuario, $senha, $banco, 3306);
+    
+    if ($conn->connect_error) {
+        throw new Exception("Erro MySQL: " . $conn->connect_error);
+    }
+    
+    echo "Conexão bem-sucedida!<br>";
+    echo "Versão do MySQL: " . $conn->server_version;
+    
+    $conn->close();
+    
+} catch (Exception $e) {
+    echo "Falha crítica: " . $e->getMessage();
+    error_log("Erro de conexão: " . $e->getMessage()); // Registra no log de erros
 }
 ?>

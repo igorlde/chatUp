@@ -1,38 +1,58 @@
 <?php
 session_start();
-include("../connector_database/connector.php");
+include("../connector_database/connector.php"); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isset($_POST['senha_login'])) {
     $email = $_POST['email_login'] ?? null;
     $senha = $_POST['senha_login'] ?? null;
 
     if (!$email || !$senha) {
-        die("ERRO: Preencha todos os campos.");
+        $_SESSION['erro'] = "Preencha todos os campos";
+        header("Location: login.php");
+        exit;
     }
 
-    $sql = $conn->prepare("SELECT * FROM logins WHERE email = ?");
-    $sql->bind_param("s", $email);
-    $sql->execute();
-    $result = $sql->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        if (password_verify($senha, $row["senha"])) {
-            $_SESSION["user_id"] = $row["id"];
-            $_SESSION["nome_usuario"] = $row["nome_usuario"];
-            header("Location: dashboard.php"); // Redirecionar para página de sucesso
-            exit;
-        } else {
-            echo "Senha incorreta.";
+    try {
+        // Verifica se a conexão está ativa
+        if (!$conn || $conn->connect_error) {
+            throw new Exception("Erro na conexão com o banco de dados");
         }
-    } else {
-        echo "Usuário não encontrado.";
-    }
 
-    $conn->close();
+        $sql = $conn->prepare("SELECT id, nome_usuario, senha FROM logins WHERE email = ?");
+        $sql->bind_param("s", $email);
+        
+        if (!$sql->execute()) {
+            throw new Exception("Erro na execução da consulta");
+        }
+
+        $result = $sql->get_result();
+
+        if ($result->num_rows === 1) {
+            $row = $result->fetch_assoc();
+
+            if (password_verify($senha, $row["senha"])) {
+                $_SESSION["user_id"] = $row["id"];
+                $_SESSION["nome_usuario"] = $row["nome_usuario"];
+                header("Location: ../dashboard/dashboard.php");
+                exit;
+            } else {
+                $_SESSION['erro'] = "Credenciais inválidas";
+            }
+        } else {
+            $_SESSION['erro'] = "Credenciais inválidas";
+        }
+
+        $sql->close(); // Fecha apenas o statement
+
+    } catch (Exception $e) {
+        $_SESSION['erro'] = "Erro no servidor: " . $e->getMessage();
+    } finally {
+        header("Location: login.php");
+        exit;
+    }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -41,9 +61,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        .erro {
+            color: red;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
 
 <body>
+    <?php if (isset($_SESSION['erro'])): ?>
+        <div class="erro"><?= $_SESSION['erro'] ?></div>
+        <?php unset($_SESSION['erro']); ?>
+    <?php endif; ?>
+
     <form action="login.php" method="post">
         <div>
             <label for="email_login">Email</label>
@@ -58,12 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
         </div>
     </form>
 
-    <!-- Formulário para redirecionar para cadastro.php -->
-    <form action="cadastro/cadastro.php" method="get">
-        <div>
-            <input type="submit" value="Cadastrar">
-        </div>
-    </form>
+    <!-- Substituído formulário por link simples -->
+    <p>Não tem conta? <a href="cadastro/cadastro.php">Cadastre-se</a></p>
 </body>
 
 </html>

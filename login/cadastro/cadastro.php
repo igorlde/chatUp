@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Preparar a consulta para inserir dados no banco
-    $sql = $conn->prepare("INSERT INTO logins (nome, nome_usuario, email, senha, data_nacimento) VALUES (?, ?, ?, ?, ?)");
+    $sql = $conn->prepare("INSERT INTO users (nome, nome_usuario, email, senha, data_nacimento) VALUES (?, ?, ?, ?, ?)");
     $sql->bind_param("sssss", $nome, $nome_usuario, $email, $senha_hash, $data_nacimento);
 
     if ($sql->execute()) {
