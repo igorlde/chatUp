@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             throw new Exception("Erro na conexão com o banco de dados");
         }
 
-        $sql = $conn->prepare("SELECT id, nome_usuario, senha FROM logins WHERE email = ?");
+        $sql = $conn->prepare("SELECT id, nome_usuario, senha FROM users WHERE email = ?");
         $sql->bind_param("s", $email);
         
         if (!$sql->execute()) {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             if (password_verify($senha, $row["senha"])) {
                 $_SESSION["user_id"] = $row["id"];
                 $_SESSION["nome_usuario"] = $row["nome_usuario"];
-                header("Location: ../dashboard/dashboard.php");
+                header("Location: ../main.php");
                 exit;
             } else {
                 $_SESSION['erro'] = "Credenciais inválidas";

@@ -1,24 +1,25 @@
 <?php
-$localhost = "127.0.0.1:3306";
+$localhost = "127.0.0.1";
 $usuario = "root";
-$senha = "G!9fLx@82_Tz%7kR";
+$senha = "";
 $banco = "banco_chatUp";
+$porta = 3306;
 
-// Tentativa de conexão
+// Habilitar erros
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 try {
-    $conn = new mysqli($localhost, $usuario, $senha, $banco, 3306);
+    $conn = new mysqli($localhost, $usuario, $senha, $banco, $porta);
+    $conn->set_charset("utf8mb4");
     
-    if ($conn->connect_error) {
-        throw new Exception("Erro MySQL: " . $conn->connect_error);
+    // Verificação extra de conexão
+    if ($conn->connect_errno) {
+        throw new Exception("Falha na conexão: " . $conn->connect_error);
     }
     
-    echo "Conexão bem-sucedida!<br>";
-    echo "Versão do MySQL: " . $conn->server_version;
-    
-    $conn->close();
-    
 } catch (Exception $e) {
-    echo "Falha crítica: " . $e->getMessage();
-    error_log("Erro de conexão: " . $e->getMessage()); // Registra no log de erros
+    die("ERRO DE CONEXÃO: " . $e->getMessage());
 }
+
+// NÃO fechar conexão aqui!
 ?>
