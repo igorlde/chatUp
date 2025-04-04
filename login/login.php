@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     </form>
 
     <!-- Substituído formulário por link simples -->
-    <p>Não tem conta? <a href="cadastro/cadastro.php">Cadastre-se</a></p>
+    <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
 </body>
 
 </html>
