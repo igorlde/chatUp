@@ -7,8 +7,11 @@
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
-    <h1>Testando</h1>
+    <h1 class = "h1-criarPost">Testando</h1>
     
+    
+
+
     <!-- Botão para criar novo post -->
     <a href="post.php" class="btn-criar-post">
         Criar Novo Post

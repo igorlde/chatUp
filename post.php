@@ -102,6 +102,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+    <title>Post teste</title>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div class="post-creator">

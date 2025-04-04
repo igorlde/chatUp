@@ -1,3 +1,7 @@
+
+/*
+parte codigo do main butao criar post
+*/
 .btn-criar-post {
     display: inline-block;
     padding: 12px 24px;
@@ -17,6 +21,58 @@
 }
 
 
-h1{
+.h1-criarPost1{
     color: red;
+}
+
+.erro {
+    color: red;
+    margin-bottom: 15px;
+}
+
+
+/*
+parte a baixo e do html cadastro
+*/
+
+.h1-cadastro{
+color: black;
+
+}
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+.error {
+    color: red;
+    margin-bottom: 10px;
+}
+.success {
+    color: green;
+    margin-bottom: 10px;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #45a049;
 }
