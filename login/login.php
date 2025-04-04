@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             $row = $result->fetch_assoc();
 
             if (password_verify($senha, $row["senha"])) {
-                $_SESSION["user_id"] = $row["id"];
+                $_SESSION["usuario_id"] = $row["id"];
                 $_SESSION["nome_usuario"] = $row["nome_usuario"];
                 header("Location: ../main.php");
                 exit;
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             $_SESSION['erro'] = "Credenciais inválidas";
         }
 
-        $sql->close(); // Fecha apenas o statement
+        $sql->close(); //fecha a conexão
 
     } catch (Exception $e) {
         $_SESSION['erro'] = "Erro no servidor: " . $e->getMessage();
@@ -89,7 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
         </div>
     </form>
 
-    <!-- Substituído formulário por link simples -->
     <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
 </body>
 

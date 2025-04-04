@@ -2,176 +2,125 @@
 session_start();
 include("connector_database/connector.php");
 
+// Habilitar relatório de erros detalhado (desativar em produção)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Valores padrão seguros
-    $titulo = trim($_POST["titulo"] ?? '');
-    $tema = trim($_POST["tema"] ?? null);
-    $descricao = trim($_POST["descricao"] ?? null);
-    $conteudo = trim($_POST["conteudo"] ?? '');
-    $usuario_id = $_SESSION['usuario_id'] ?? null; // Supondo que o usuário está logado
-
-    // Validação básica
-    $erros = [];
-    
-    if (empty($titulo)) {
-        $erros[] = "O título é obrigatório";
-    }
-    
-    if (empty($conteudo)) {
-        $erros[] = "O conteúdo não pode estar vazio";
-    }
-    
-    if (!$usuario_id) {
-        $erros[] = "Usuário não autenticado";
-    }
-
-    if (!empty($erros)) {
-        $_SESSION['erros_post'] = $erros;
-        header("Location: post.php");
-        exit;
-    }
-
     try {
-        // Usar transação para segurança
+        // Validação e sanitização
+        $titulo = trim($_POST["titulo"] ?? '');
+        $tema = !empty($_POST["tema"]) ? trim($_POST["tema"]) : null;
+        $descricao = !empty($_POST["descricao"]) ? trim($_POST["descricao"]) : null;
+        $conteudo = trim($_POST["conteudo"] ?? '');
+        $usuario_id = $_SESSION['usuario_id'] ?? null;
+
+        // Validação básica
+        $erros = [];
+        if (empty($titulo)) $erros[] = "Título é obrigatório";
+        if (empty($conteudo)) $erros[] = "Conteúdo não pode estar vazio";
+        if (!$usuario_id) $erros[] = "Usuário não autenticado";
+
+        if (!empty($erros)) {
+            $_SESSION['erros_post'] = $erros;
+            header("Location: post.php");
+            exit;
+        }
+
         $conn->begin_transaction();
 
-        // Preparar statement
+        // Inserir post principal
         $stmt = $conn->prepare("INSERT INTO posts 
             (usuario_id, titulo, tema, descricao, conteudo) 
             VALUES (?, ?, ?, ?, ?)");
         
-        // Verificar erro na preparação
-        if (!$stmt) {
-            throw new Exception("Erro na preparação da query: " . $conn->error);
-        }
-
-        // Bind parameters
-        $stmt->bind_param(
-            "issss",  // Tipos: i (integer), s (string)
-            $usuario_id,
-            $titulo,
-            $tema,
-            $descricao,
-            $conteudo
-        );
-
-        // Executar
-        if (!$stmt->execute()) {
-            throw new Exception("Erro na execução: " . $stmt->error);
-        }
-
-        // Obter ID do novo post
+        if (!$stmt) throw new Exception("Erro na preparação do post: " . $conn->error);
+        
+        $stmt->bind_param("issss", $usuario_id, $titulo, $tema, $descricao, $conteudo);
+        if (!$stmt->execute()) throw new Exception("Erro ao salvar post: " . $stmt->error);
+        
         $novo_post_id = $conn->insert_id;
 
-        // Aqui viria o código para processar as tags e imagem...
+        // Processar tags
+        if (!empty($_POST['tags'])) {
+            $tags = array_unique(array_filter(array_map('trim', 
+                explode(',', $_POST['tags'])
+            )));
+
+            if (!empty($tags)) {
+                $tagStmt = $conn->prepare("INSERT IGNORE INTO tags (nome_tag) VALUES (?)");
+                $getTagStmt = $conn->prepare("SELECT id FROM tags WHERE nome_tag = ?");
+                $relStmt = $conn->prepare("INSERT INTO post_tags (post_id, tag_id) VALUES (?, ?)");
+
+                if (!$tagStmt || !$getTagStmt || !$relStmt) {
+                    throw new Exception("Erro na preparação das tags: " . $conn->error);
+                }
+
+                foreach ($tags as $tagName) {
+                    // Inserir tag
+                    $tagStmt->bind_param("s", $tagName);
+                    if (!$tagStmt->execute()) {
+                        throw new Exception("Erro ao inserir tag: " . $tagStmt->error);
+                    }
+
+                    // Obter ID da tag
+                    $getTagStmt->bind_param("s", $tagName);
+                    $getTagStmt->execute();
+                    $tagId = $getTagStmt->get_result()->fetch_row()[0];
+
+                    // Relacionar com post
+                    $relStmt->bind_param("ii", $novo_post_id, $tagId);
+                    if (!$relStmt->execute()) {
+                        throw new Exception("Erro ao vincular tag: " . $relStmt->error);
+                    }
+                }
+            }
+        }
 
         $conn->commit();
-        
         $_SESSION['sucesso_post'] = "Post criado com sucesso!";
         header("Location: main.php");
         exit;
 
     } catch (Exception $e) {
         $conn->rollback();
-        error_log("Erro ao criar post: " . $e->getMessage());
-        $_SESSION['erros_post'] = ["Erro ao criar o post. Tente novamente."];
+        error_log("ERRO: " . $e->getMessage());
+        $_SESSION['erros_post'] = ["Erro: " . $e->getMessage()];
         header("Location: post.php");
         exit;
     } finally {
-        $stmt->close();
-        $conn->close();
+        // Fechar todas as conexões
+        if (isset($stmt)) $stmt->close();
+        if (isset($tagStmt)) $tagStmt->close();
+        if (isset($getTagStmt)) $getTagStmt->close();
+        if (isset($relStmt)) $relStmt->close();
+        if ($conn) $conn->close();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Novo Post</title>
-    <style>
-        .post-creator {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
-        }
-
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .tags-input {
-            border: 1px solid #ddd;
-            padding: 0.5rem;
-            border-radius: 4px;
-        }
-
-        .tag-item {
-            display: inline-block;
-            background: #e9ecef;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            margin: 0.25rem;
-            font-size: 0.9rem;
-        }
-
-        .submit-btn {
-            background: #28a745;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            background: #218838;
-        }
-
-        .form-note {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-    </style>
 </head>
 <body>
     <div class="post-creator">
+        <!-- Exibir mensagens de erro/sucesso -->
+        <?php if (!empty($_SESSION['erros_post'])): ?>
+            <div class="alert-error">
+                <?php foreach ($_SESSION['erros_post'] as $erro): ?>
+                    <p><?= htmlspecialchars($erro) ?></p>
+                <?php endforeach; ?>
+            </div>
+            <?php unset($_SESSION['erros_post']); ?>
+        <?php endif; ?>
+        
+        <!--deixa como esta pelo amor de deus.-->
+        <form method="POST">
+           
+            <div class="post-creator">
         <h1>Criar Novo Post</h1>
-        <form action="/posts" method="POST" enctype="multipart/form-data">
+        <form action="post.php" method="POST">
             <!-- Título -->
             <div class="form-group">
                 <label for="titulo">Título:</label>
@@ -205,24 +154,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <textarea id="conteudo" name="conteudo" required 
                     placeholder="Desenvolva seu conteúdo aqui..."></textarea>
             </div>
-
-            <!-- Tags -->
+            <!-- Ajuste no campo de tags -->
             <div class="form-group">
                 <label>Tags:</label>
-                <div class="tags-input">
-                    <div class="tag-item">Tecnologia <span class="remove-tag">×</span></div>
-                    <input type="text" id="tags" name="tags" 
-                        placeholder="Digite tags separadas por vírgula" 
-                        style="border: none; background: transparent; width: auto;">
+                <div class="tags-input" id="tagsContainer">
+                    <input type="hidden" name="tags" id="hiddenTags">
+                    <div id="tagsList"></div>
+                    <input type="text" id="tagsInput" 
+                           placeholder="Digite tags separadas por vírgula">
                 </div>
-                <div class="form-note">Exemplo: programação, web-development, frontend</div>
-            </div>
-
-            <!-- Upload de Imagem -->
-            <div class="form-group">
-                <label for="imagem">Imagem Destaque:</label>
-                <input type="file" id="imagem" name="imagem" accept="image/*">
-                <div class="form-note">Formatos suportados: JPG, PNG, GIF (máx. 5MB)</div>
+                <div class="form-note">Exemplo: programação, web-development</div>
             </div>
 
             <button type="submit" class="submit-btn">Publicar Post</button>
@@ -230,23 +171,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        // Script básico para gerenciamento de tags
-        const tagsInput = document.querySelector('#tags');
-        const tagsContainer = document.querySelector('.tags-input');
-        
+        // Script melhorado para tags
+        const tagsInput = document.getElementById('tagsInput');
+        const hiddenTags = document.getElementById('hiddenTags');
+        const tagsList = document.getElementById('tagsList');
+
+        function updateHiddenTags() {
+            const tags = Array.from(tagsList.children)
+                .map(tag => tag.textContent.replace('×', '').trim());
+            hiddenTags.value = tags.join(',');
+        }
+
+        function createTagElement(tagName) {
+            const tag = document.createElement('div');
+            tag.className = 'tag-item';
+            tag.innerHTML = `
+                ${tagName}
+                <span class="remove-tag" onclick="this.parentElement.remove(); updateHiddenTags()">×</span>
+            `;
+            return tag;
+        }
+
         tagsInput.addEventListener('keydown', (e) => {
-            if (e.key === ',' || e.key === 'Enter') {
+            if (['Enter', ',', ';'].includes(e.key)) {
                 e.preventDefault();
-                const tag = tagsInput.value.trim().replace(/,/g, '');
+                const tag = tagsInput.value.trim().replace(/[,;]$/, '');
                 if (tag) {
-                    const tagElement = document.createElement('div');
-                    tagElement.className = 'tag-item';
-                    tagElement.innerHTML = `
-                        ${tag}
-                        <span class="remove-tag" onclick="this.parentElement.remove()">×</span>
-                    `;
-                    tagsContainer.insertBefore(tagElement, tagsInput);
+                    tagsList.appendChild(createTagElement(tag));
                     tagsInput.value = '';
+                    updateHiddenTags();
                 }
             }
         });

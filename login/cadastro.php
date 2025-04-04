@@ -68,7 +68,7 @@
          }
  
      if ($sql->execute()) {
-         header('Location: ../login.php'); 
+         header('Location: login.php'); 
          exit; // Certificar-se de que o script pare após o redirecionamento
      } else {
          echo "Erro ao cadastrar: " . $conn->error;
@@ -132,7 +132,7 @@
      $conn->close();
          // Redirecionamento com sucesso
          $_SESSION['sucesso'] = "Cadastro realizado!";
-         header("Location: /login.php");
+         header("Location: login.php");
          exit;
  
      } catch (mysqli_sql_exception $e) {
