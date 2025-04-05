@@ -2,7 +2,7 @@
 /*
 parte codigo do main butao criar post
 */
-.btn-criar-post {
+.create-post-btn {
     display: inline-block;
     padding: 12px 24px;
     background-color: #4CAF50;
@@ -14,20 +14,6 @@ parte codigo do main butao criar post
     transition: background-color 0.3s;
     border: none;
     cursor: pointer;
-}
-
-.btn-criar-post:hover {
-    background-color: #45a049;
-}
-
-
-.h1-criarPost1{
-    color: red;
-}
-
-.erro {
-    color: red;
-    margin-bottom: 15px;
 }
 
 

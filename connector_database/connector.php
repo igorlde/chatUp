@@ -21,5 +21,4 @@ try {
     die("ERRO DE CONEXÃO: " . $e->getMessage());
 }
 
-// NÃO fechar conexão aqui!
 ?>
