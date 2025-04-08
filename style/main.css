@@ -1,0 +1,75 @@
+/*
+parte codigo do main butao criar post
+*/
+.create-post-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: blue;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin: 20px;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+
+.h1-cadastro{
+    color: black;
+    
+    }
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+    .error {
+        color: red;
+        margin-bottom: 10px;
+    }
+    .success {
+        color: green;
+        margin-bottom: 10px;
+    }
+    button {
+        background-color: blue;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 15px;
+    }
+    button:hover {
+        background-color: #333;
+    }
+    
+    .post-card {
+        border: 4px solid blue;
+        margin: 10px;
+        border-radius: 15px;
+        padding: 10px;
+    }
+
+    .post-author { 
+        font-weight: bold;
+    }
+
+    .comentario-autor {
+        font-weight: bold;
+    }

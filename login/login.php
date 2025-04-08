@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/login.css">
 </head>
 
 <body>

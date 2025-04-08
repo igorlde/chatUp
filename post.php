@@ -41,6 +41,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $novo_post_id = $conn->insert_id;
 
+        /**
+         * 
+         *Dia 07/04: ao testar as partes do sistema já feitas, conseguimos identificar um erro. Quando o integrante Hitalo tentou fez um post sem inserir nenhuma tag o botão de comentários do post ficou oculto, impossibilitando comentar. Depois de identificar a falha, adicionamos uma mensagem de "tag obrigatoria".  
+         */
+        if(empty($_POST['tags'])){
+            die("erro precisa colocar uma tag por favor.");
+        }
+
+
+
         // Processar tags
         if (!empty($_POST['tags'])) {
             $tags = array_unique(array_filter(array_map('trim', 
@@ -103,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-br">
 <head>
     <title>Post teste</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/post.css">
 </head>
 <body>
     <div class="post-creator">
@@ -120,6 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!--deixa como esta pelo amor de deus.-->
         <form method="POST">
            
+       
             <div class="post-creator">
         <h1>Criar Novo Post</h1>
         <form action="post.php" method="POST">
@@ -129,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="text" id="titulo" name="titulo" required maxlength="100" placeholder="Insira um título impactante">
                 <div class="form-note">Máximo 100 caracteres</div>
             </div>
-
+            <section class="caixapost">
             <!-- Tema/Categoria -->
             <div class="form-group">
                 <label for="tema">Categoria Principal:</label>
@@ -171,6 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit" class="submit-btn">Publicar Post</button>
         </form>
     </div>
+        </section>
 
     <script>
         // Script melhorado para tags

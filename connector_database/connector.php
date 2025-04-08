@@ -1,7 +1,7 @@
 <?php
 $localhost = "127.0.0.1";
 $usuario = "root";
-$senha = "";
+$senha = "G!9fLx@82_Tz%7kR";
 $banco = "banco_chatUp";
 $porta = 3306;
 

@@ -175,7 +175,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="../style/style.css"> <!--conectando a style -->
+    <link rel="stylesheet" href="../style/cadastro.css"> <!--conectando a style -->
     <style>
        
     </style>
