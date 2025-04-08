@@ -13,47 +13,47 @@ if (!$conn || $conn->connect_error) {
     die("Status da conexão: " . ($conn->connect_error ?? "objeto invalido de conexão"));
 }
 
-//Metodo de acesso para aparecer nossos dados la no html
 $query = "SELECT 
             p.*, 
             u.nome as autor,
-            GROUP_CONCAT(t.nome_tag) as tags
+            GROUP_CONCAT(DISTINCT t.nome_tag) as tags,
+            p.imagem_capa,
+            GROUP_CONCAT(DISTINCT pi.caminho_arquivo) as imagens_adicionais
           FROM posts p
           INNER JOIN users u ON p.usuario_id = u.id
           LEFT JOIN post_tags pt ON p.id = pt.post_id
           LEFT JOIN tags t ON pt.tag_id = t.id
+          LEFT JOIN post_imagens pi ON p.id = pi.post_id
           GROUP BY p.id
           ORDER BY p.data_publicacao DESC";
 
-//criando um array de post.
 $posts = [];
+$comentariosPorPost = [];
+
 if ($result = $conn->query($query)) {
     while ($row = $result->fetch_assoc()) {
+        // Processar campos
+        $row['tags'] = $row['tags'] ? explode(',', $row['tags']) : [];
+        $row['imagens_adicionais'] = $row['imagens_adicionais'] ? explode(',', $row['imagens_adicionais']) : [];
         $posts[] = $row;
-        // Dentro do loop de posts
-        $queryComentarios = "SELECT 
-                                c.*, 
-                                u.nome AS autor 
-                            FROM comentarios c
-                            INNER JOIN users u ON c.usuario_id = u.id
-                            WHERE c.post_id = ?
-                            ORDER BY c.data_comentario DESC";
-        
-        $stmtComentarios = $conn->prepare($queryComentarios);
-        $stmtComentarios->bind_param("i", $row['id']); // ID do post atual
+
+        // Buscar comentários
+        $stmtComentarios = $conn->prepare("
+            SELECT c.*, u.nome as autor 
+            FROM comentarios c
+            INNER JOIN users u ON c.usuario_id = u.id
+            WHERE c.post_id = ?
+            ORDER BY c.data_comentario DESC
+        ");
+        $stmtComentarios->bind_param("i", $row['id']);
         $stmtComentarios->execute();
-        $resultComentarios = $stmtComentarios->get_result();
-        
-        // Armazena comentários no array usando o ID do post como chave
-        $comentariosPorPost[$row['id']] = $resultComentarios->fetch_all(MYSQLI_ASSOC);
-        
-        $stmtComentarios->close();
+        $comentarios = $stmtComentarios->get_result()->fetch_all(MYSQLI_ASSOC);
+        $comentariosPorPost[$row['id']] = $comentarios;
     }
     $result->free();
 }
-
+$conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -63,77 +63,91 @@ if ($result = $conn->query($query)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
     <link rel="stylesheet" href="style/main.css">
-</head>
-<?php if (!empty($posts)): ?>
-    <?php foreach ($posts as $post): ?>
-        <article class="post-card">
-            <div class="post-header">
-                <h2 class="post-title"><?= htmlspecialchars($post['titulo']) ?></h2>
-                <div class="post-meta">
-                    <span class="post-author"><?= htmlspecialchars($post['autor']) ?></span>
-                    <span> • <?= date('d/m/Y H:i', strtotime($post['data_publicacao'])) ?></span>
-                </div>
-            </div>
+    </head>
+<body>
+    <main>
+        <a href="criar-post.php" class="create-post-btn">＋ Criar Novo Post</a>
 
-            <?php if ($post['descricao']): ?>
-                <p class="post-description"><?= htmlspecialchars($post['descricao']) ?></p>
-            <?php endif; ?>
+        <?php if (!empty($posts)): ?>
+            <?php foreach ($posts as $post): ?>
+                <article class="post-card">
+                    <div class="post-header">
+                        <h2 class="post-title"><?= htmlspecialchars($post['titulo']) ?></h2>
+                        <div class="post-meta">
+                            <span class="post-author"><?= htmlspecialchars($post['autor']) ?></span>
+                            <span> • <?= date('d/m/Y H:i', strtotime($post['data_publicacao'])) ?></span>
+                        </div>
+                    </div>
 
-            <div class="post-content"><?= nl2br(htmlspecialchars($post['conteudo'])) ?></div>
-
-            <?php if (!empty($post['tags'])): ?>
-                <div class="post-tags">
-                    <?php foreach (explode(',', $post['tags']) as $tag): ?>
-                        <span class="tag"><?= htmlspecialchars(trim($tag)) ?></span>
-                    <?php endforeach; ?>
-
-                </div>
-                <!--comentarios a partir daqui -->
-                <div class="comentarios">
-                    <h3>Comentários (<?= count($comentariosPorPost[$post['id']] ?? []) ?>)</h3>
-
-                    <!-- Lista de Comentários -->
-                    <?php if (!empty($comentariosPorPost[$post['id']])): ?>
-                        <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
-                            <div class="comentario">
-                                <div class="comentario-header">
-                                    <span class="comentario-autor">
-                                        <?= htmlspecialchars($comentario['autor']) ?>
-                                    </span>
-                                    <span class="comentario-data">
-                                        <?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?>
-                                    </span>
-                                </div>
-                                <p class="comentario-texto">
-                                    <?= nl2br(htmlspecialchars($comentario['texto'])) ?>
-                                </p>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                    <?php if (!empty($post['imagem_capa'])): ?>
+                        <img src="<?= htmlspecialchars($post['imagem_capa']) ?>" 
+                             class="post-capa"
+                             alt="Capa do post">
                     <?php endif; ?>
 
-                    <!-- Formulário Corrigido -->
-                    <form class="form-comentarios" method="POST" action="comentario.php">
-                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                        <textarea
-                            name="comentario" # Nome do campo corrigido
-                            placeholder="Escreva seu comentário..."
-                            required></textarea>
-                        <button type="submit" class="btn-comentar">Publicar Comentário</button>
-                    </form>
-                </div>
-            <?php endif; ?>
-        </article>
-    <?php endforeach; ?>
-<?php else: ?>
-    <div class="no-posts">
-        <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
-    </div>
-<?php endif; ?>
-</div>
+                    <?php if (!empty($post['descricao'])): ?>
+                        <p class="post-description"><?= htmlspecialchars($post['descricao']) ?></p>
+                    <?php endif; ?>
 
-<a href="post.php" class="create-post-btn">Criar Novo Post</a>
+                    <div class="post-content"><?= nl2br(htmlspecialchars($post['conteudo'])) ?></div>
+
+                    <?php if (!empty($post['imagens_adicionais'])): ?>
+                        <div class="galeria-post">
+                            <?php foreach ($post['imagens_adicionais'] as $imagem): ?>
+                                <img src="<?= htmlspecialchars($imagem) ?>" 
+                                     class="galeria-imagem"
+                                     alt="Imagem do post">
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($post['tags'])): ?>
+                        <div class="post-tags">
+                            <?php foreach ($post['tags'] as $tag): ?>
+                                <span class="tag"><?= htmlspecialchars($tag) ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="comentarios">
+                        <h3>Comentários (<?= count($comentariosPorPost[$post['id']] ?? []) ?>)</h3>
+
+                        <?php if (!empty($comentariosPorPost[$post['id']])): ?>
+                            <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
+                                <div class="comentario">
+                                    <div class="comentario-header">
+                                        <span class="comentario-autor">
+                                            <?= htmlspecialchars($comentario['autor']) ?>
+                                        </span>
+                                        <span class="comentario-data">
+                                            <?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?>
+                                        </span>
+                                    </div>
+                                    <p class="comentario-texto">
+                                        <?= nl2br(htmlspecialchars($comentario['texto'])) ?>
+                                    </p>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                        <?php endif; ?>
+
+                        <form class="form-comentarios" method="POST" action="comentario.php">
+                            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                            <textarea 
+                                name="comentario"
+                                placeholder="Escreva seu comentário..." 
+                                required></textarea>
+                            <button type="submit" class="btn-comentar">Publicar Comentário</button>
+                        </form>
+                    </div>
+                </article>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="no-posts">
+                <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
+            </div>
+        <?php endif; ?>
+    </main>
 </body>
-
 </html>
