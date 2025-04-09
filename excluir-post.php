@@ -38,25 +38,25 @@ try {
             $arquivos[] = __DIR__ . '/' . $row['caminho_arquivo'];
         }
     }
-    echo "Arquivos encontrados: " . implode(", ", $arquivos) . "<br>";
+   // echo "Arquivos encontrados: " . implode(", ", $arquivos) . "<br>";
 
     // Excluir comentários
     $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-    echo "Comentários excluídos<br>";
+    //echo "Comentários excluídos<br>";
 
     // Excluir tags
     $stmt = $conn->prepare("DELETE FROM post_tags WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-    echo "Tags excluídas<br>";
+   // echo "Tags excluídas<br>";
 
     // Excluir imagens do post
     $stmt = $conn->prepare("DELETE FROM post_imagens WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-    echo "Imagens adicionais excluídas<br>";
+    //echo "Imagens adicionais excluídas<br>";
 
     // Excluir o post
     $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
@@ -64,7 +64,7 @@ try {
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
-        echo "Post excluído<br>";
+       // echo "Post excluído<br>";
     } else {
         echo "NENHUM POST FOI EXCLUÍDO!<br>";
     }
@@ -75,7 +75,8 @@ try {
     foreach ($arquivos as $caminho) {
         if (file_exists($caminho)) {
             unlink($caminho);
-            echo "Arquivo deletado: $caminho<br>";
+           // echo "Arquivo deletado: $caminho<br>";
+           header("Location: main.php");
         } else {
             echo "Arquivo não encontrado: $caminho<br>";
         }

@@ -129,6 +129,13 @@ $conn->close();
                         </div>
                     <?php endif; ?>
 
+                    <?php if (isset($_SESSION['sucesso'])): ?>
+                        <div class="mensagem-sucesso" style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                            <?= $_SESSION['sucesso'] ?>
+                        </div>
+                        <?php unset($_SESSION['sucesso']); ?>
+                    <?php endif; ?>
+
                     <div class="comentarios">
                         <h3>Comentários (<?= count($comentariosPorPost[$post['id']] ?? []) ?>)</h3>
 
