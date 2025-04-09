@@ -2,25 +2,23 @@
 session_start();
 require __DIR__ . '/connector_database/connector.php';
 
-// Verificar autenticação e permissões
 if (!isset($_SESSION['usuario_id'])) {
-    header("Location: login.php");
-    exit;
+    die("Usuário não logado.");
 }
 
-// Verificar se o ID do post foi recebido
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    $_SESSION['erro'] = "Post inválido";
-    header("Location: main.php");
-    exit;
+    die("ID do post inválido.");
 }
 
 $post_id = (int)$_GET['id'];
+echo "ID recebido: $post_id<br>";
 
 try {
     $conn->begin_transaction();
 
-    // 1. Buscar informações do post
+    echo "Iniciando transação...<br>";
+
+    // Buscar caminhos dos arquivos
     $stmt = $conn->prepare("
         SELECT p.imagem_capa, pi.caminho_arquivo 
         FROM posts p
@@ -30,7 +28,7 @@ try {
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    
+
     $arquivos = [];
     while ($row = $result->fetch_assoc()) {
         if (!empty($row['imagem_capa'])) {
@@ -40,44 +38,51 @@ try {
             $arquivos[] = __DIR__ . '/' . $row['caminho_arquivo'];
         }
     }
+    echo "Arquivos encontrados: " . implode(", ", $arquivos) . "<br>";
 
-    // 2. Excluir registros do banco de dados
-    // Excluir comentários primeiro
+    // Excluir comentários
     $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
+    echo "Comentários excluídos<br>";
 
-    // Excluir relacionamento de tags
+    // Excluir tags
     $stmt = $conn->prepare("DELETE FROM post_tags WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
+    echo "Tags excluídas<br>";
 
     // Excluir imagens do post
     $stmt = $conn->prepare("DELETE FROM post_imagens WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
+    echo "Imagens adicionais excluídas<br>";
 
-    // Finalmente excluir o post
+    // Excluir o post
     $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
 
+    if ($stmt->affected_rows > 0) {
+        echo "Post excluído<br>";
+    } else {
+        echo "NENHUM POST FOI EXCLUÍDO!<br>";
+    }
+
     $conn->commit();
 
-    // 3. Excluir arquivos físicos
+    // Excluir arquivos físicos
     foreach ($arquivos as $caminho) {
         if (file_exists($caminho)) {
             unlink($caminho);
+            echo "Arquivo deletado: $caminho<br>";
+        } else {
+            echo "Arquivo não encontrado: $caminho<br>";
         }
     }
 
-    $_SESSION['sucesso'] = "Post excluído com sucesso!";
-
 } catch (Exception $e) {
     $conn->rollback();
-    $_SESSION['erro'] = "Erro ao excluir post: " . $e->getMessage();
+    echo "Erro ao excluir: " . $e->getMessage();
 }
-
-header("Location: main.php");
-exit;
 ?>

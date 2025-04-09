@@ -7,7 +7,7 @@ ini_set('display_errors', 1);
 // Configurações de upload
 $diretorioUploads = __DIR__ . '/uploads/posts/';
 $tamanhoMaximo = 2 * 1024 * 1024; // 2MB
-$maxImagens = 5;
+$MAXIMO_IMAGEM = 5;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
@@ -42,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!empty($_FILES['imagens_adicionais']['tmp_name'][0])) {
             $totalImagens = count($_FILES['imagens_adicionais']['tmp_name']);
 
-            if ($totalImagens > $maxImagens) {
-                throw new Exception("Máximo de {$maxImagens} imagens adicionais");
+            if ($totalImagens > $MAXIMO_IMAGEM) {
+                throw new Exception("Máximo de {$MAXIMO_IMAGEM} imagens adicionais");
             }
 
             foreach ($_FILES['imagens_adicionais']['tmp_name'] as $key => $tmpName) {
@@ -189,6 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="Tecnologia">Tecnologia</option>
                     <option value="Educação">Educação</option>
                     <option value="Viagens">Viagens</option>
+                    <option value="Outros">Outros</option>
                 </select>
             </div>
 

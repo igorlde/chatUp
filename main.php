@@ -52,6 +52,7 @@ if ($result = $conn->query($query)) {
     }
     $result->free();
 }
+
 $conn->close();
 ?>
 
@@ -63,11 +64,30 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
     <link rel="stylesheet" href="style/main.css">
-    </head>
-<body>
-    <main>
-        <a href="criar-post.php" class="create-post-btn">＋ Criar Novo Post</a>
+</head>
 
+<body>
+    <header>
+        <a href="post.php" class="create-post-btn">＋ Criar Novo Post</a>
+
+        <!--metodo para buscar usuarios-->
+        <form method="POST" action="busca.php">
+            <input type="text" name="User_name" placeholder="Buscar usuários...">
+            <button type="submit">Buscar</button>
+        </form>
+        <form action="editar-perfil.php" method="post">
+            <button type="submit">editar perfil </button>
+        </form>
+
+        </form>
+    </header>
+    <main>
+
+        <!--criação de perfil-->
+
+
+
+        <!-- codigo valiosos-->
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>
                 <article class="post-card">
@@ -80,9 +100,9 @@ $conn->close();
                     </div>
 
                     <?php if (!empty($post['imagem_capa'])): ?>
-                        <img src="<?= htmlspecialchars($post['imagem_capa']) ?>" 
-                             class="post-capa"
-                             alt="Capa do post">
+                        <img src="<?= htmlspecialchars($post['imagem_capa']) ?>"
+                            class="post-capa"
+                            alt="Capa do post">
                     <?php endif; ?>
 
                     <?php if (!empty($post['descricao'])): ?>
@@ -94,9 +114,9 @@ $conn->close();
                     <?php if (!empty($post['imagens_adicionais'])): ?>
                         <div class="galeria-post">
                             <?php foreach ($post['imagens_adicionais'] as $imagem): ?>
-                                <img src="<?= htmlspecialchars($imagem) ?>" 
-                                     class="galeria-imagem"
-                                     alt="Imagem do post">
+                                <img src="<?= htmlspecialchars($imagem) ?>"
+                                    class="galeria-imagem"
+                                    alt="Imagem do post">
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
@@ -132,14 +152,22 @@ $conn->close();
                             <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
                         <?php endif; ?>
 
-                        <form class="form-comentarios" method="POST" action="comentario.php">
-                            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                            <textarea 
-                                name="comentario"
-                                placeholder="Escreva seu comentário..." 
-                                required></textarea>
-                            <button type="submit" class="btn-comentar">Publicar Comentário</button>
-                        </form>
+                        <!--botao de exclusao -->
+                        <?php if ($post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                            <form method="GET" action="excluir-post.php" onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
+                                <input type="hidden" name="id" value="<?= $post['id'] ?>">
+                                <button type="submit">Excluir</button>
+                            </form>
+                            <?php endif; ?>//
+
+                            <form class="form-comentarios" method="POST" action="comentario.php">
+                                <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                                <textarea
+                                    name="comentario"
+                                    placeholder="Escreva seu comentário..."
+                                    required></textarea>
+                                <button type="submit" class="btn-comentar">Publicar Comentário</button>
+                            </form>
                     </div>
                 </article>
             <?php endforeach; ?>
@@ -150,4 +178,5 @@ $conn->close();
         <?php endif; ?>
     </main>
 </body>
+
 </html>
