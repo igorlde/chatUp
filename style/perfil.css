@@ -1,0 +1,42 @@
+/* Estilos específicos para a página de perfil */
+.perfil-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-pic-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #3498db;
+}
+
+.btn-follow, .btn-unfollow {
+    padding: 10px 25px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-follow {
+    background: #2ecc71;
+    color: white;
+}
+
+.btn-unfollow {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-follow:hover, .btn-unfollow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}

@@ -12,6 +12,14 @@ if (!isset($_SESSION["usuario_id"])) {
 if (!$conn || $conn->connect_error) {
     die("Status da conexão: " . ($conn->connect_error ?? "objeto invalido de conexão"));
 }
+//consulta de avatar
+$stmtUser = $conn->prepare("SELECT nome, avatar FROM users WHERE id = ?");
+$stmtUser->bind_param("i", $_SESSION["usuario_id"]);
+$stmtUser->execute();
+$resultUser = $stmtUser->get_result();
+$userData = $resultUser->fetch_assoc();
+$avatar = !empty($userData['avatar']) ? $userData['avatar'] : 'default-avatar.jpg';
+$stmtUser->close();
 
 $query = "SELECT 
             p.*, 
@@ -52,7 +60,6 @@ if ($result = $conn->query($query)) {
     }
     $result->free();
 }
-
 $conn->close();
 ?>
 
@@ -63,28 +70,32 @@ $conn->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/main.css?v=2">
 </head>
 
 <body>
-    <header>
-        <a href="post.php" class="create-post-btn">＋ Criar Novo Post</a>
-
-        <!--metodo para buscar usuarios-->
-        <form method="POST" action="busca.php">
-            <input type="text" name="User_name" placeholder="Buscar usuários...">
-            <button type="submit">Buscar</button>
-        </form>
-        <form action="editar-perfil.php" method="post">
-            <button type="submit">editar perfil </button>
-        </form>
-
-        </form>
-    </header>
     <main>
+        <header>
+            <!-- Exibição da foto de perfil do usuário logado -->
+            <div class="header-profile">
+                <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto de Perfil" class="profile-pic"><!-- deixe esse caminho pois pode dar erro-->
+                <span><?= htmlspecialchars($userData['nome'] ?? '') ?></span>
+            </div>
+            <a href="post.php" class="create-post-btn">＋ Criar Novo Post</a>
 
-        <!--criação de perfil-->
+            <!-- Método para buscar usuários -->
+            <form method="POST" action="busca.php">
+                <input type="text" name="User_name" placeholder="Buscar usuários...">
+                <button type="submit">Buscar</button>
+            </form>
+            <form action="editar-perfil.php" method="post">
+                <button type="submit">Editar Perfil</button>
+            </form>
+        </header>
+        <main>
 
+
+        </main>
 
 
         <!-- codigo valiosos-->
@@ -142,17 +153,14 @@ $conn->close();
                         <?php if (!empty($comentariosPorPost[$post['id']])): ?>
                             <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
                                 <div class="comentario">
-                                    <div class="comentario-header">
-                                        <span class="comentario-autor">
-                                            <?= htmlspecialchars($comentario['autor']) ?>
-                                        </span>
-                                        <span class="comentario-data">
-                                            <?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?>
-                                        </span>
+                                <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Minha Foto" class="avatar-comentario">
+                                    <div>
+                                        <div class="comentario-header">
+                                            <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
+                                            <span class="comentario-data"><?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?></span>
+                                        </div>
+                                        <p class="comentario-texto"><?= nl2br(htmlspecialchars($comentario['texto'])) ?></p>
                                     </div>
-                                    <p class="comentario-texto">
-                                        <?= nl2br(htmlspecialchars($comentario['texto'])) ?>
-                                    </p>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -183,7 +191,7 @@ $conn->close();
                 <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
             </div>
         <?php endif; ?>
-    </main>
+
 </body>
 
 </html>

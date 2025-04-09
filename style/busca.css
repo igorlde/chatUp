@@ -1,0 +1,94 @@
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.user-list {
+    margin-top: 30px;
+}
+
+.user-card {
+    display: flex;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.profile-pic-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-visualizar {
+    padding: 8px 15px;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-follow {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+}
+
+.btn-unfollow {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.debug-info {
+    color: #999;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+
+.btn-follow, .btn-unfollow {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.btn-follow {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-follow:hover {
+    background-color: #218838;
+}
+
+.btn-unfollow {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-unfollow:hover {
+    background-color: #c82333;
+}
+
+.follow-form {
+    display: inline-block;
+}
