@@ -7,6 +7,7 @@ ini_set('display_errors', 1);
 // Configurações de upload
 $diretorioUploads = __DIR__ . '/uploads/posts/';
 $tamanhoMaximo = 2 * 1024 * 1024; // 2MB
+$tamanhoMaximoVideo = 50 * 1024 * 1024;
 $MAXIMO_IMAGEM = 5;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -16,8 +17,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mkdir($diretorioUploads, 0755, true);
         }
 
+        $videoPath = null;
+        if (!empty($_FILES['video']['tmp_name'])) {
+            $video = $_FILES['video'];
+        
+            if ($video['size'] > $tamanhoMaximoVideo) {
+                throw new Exception("O vídeo excede o limite de 200MB");
+            }
+        
+            if (!in_array($video['type'], ['video/mp4', 'video/webm'])) {
+                throw new Exception("Formato inválido (MP4/WebM)");
+            }
+        
+            $nomeUnicoVideo = uniqid('video_') . '_' . preg_replace('/[^a-zA-Z0-9_.-]/', '_', $video['name']); // Sanitize nome
+            $caminhoCompletoVideo = $diretorioUploads . $nomeUnicoVideo;
+        
+            if (!move_uploaded_file($video['tmp_name'], $caminhoCompletoVideo)) {
+                throw new Exception("Erro ao salvar vídeo. Verifique permissões.");
+            }
+        
+            $videoPath = 'uploads/posts/' . $nomeUnicoVideo;
+        }
+
         // Processar upload da capa
-        $imagemCapaPath = null;
+        $imagemCapaPath = $imagemCapaPath ?? null;
+        $videoPath = $videoPath ?? null;
         if (!empty($_FILES['imagem_capa']['tmp_name'])) {
             $arquivo = $_FILES['imagem_capa'];
 
@@ -36,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $imagemCapaPath = 'uploads/posts/' . $nomeUnico;
             }
         }
+
 
         // Processar imagens adicionais
         $imagensAdicionais = [];
@@ -78,11 +103,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $usuario_id = $_SESSION['usuario_id'] ?? null;
 
         $erros = [];
-        if (empty($titulo)) $erros[] = "Título é obrigatório";
-        if (empty($conteudo)) $erros[] = "Conteúdo não pode estar vazio";
-        if (empty($_POST['tags'])) $erros[] = "Tag obrigatória";
-        if (!$usuario_id) $erros[] = "Usuário não autenticado";
+        if (empty(trim($titulo))) $erros[] = "Título é obrigatório";
+        if (empty(trim($conteudo))) $erros[] = "Conteúdo não pode estar vazio";
+        $tags = array_filter(array_map('trim', explode(',', $tagsInput)), function ($tag) {
+            return !empty($tag);
+        });
 
+        foreach ($tags as $tag) {
+            if (mb_strlen($tag) > 30) {
+                $erros[] = "Tag '{$tag}' excede 30 caracteres";
+            }
+        }
         if (!empty($erros)) {
             $_SESSION['erros_post'] = $erros;
             header("Location: post.php");
@@ -93,10 +124,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Inserir post principal
         $stmt = $conn->prepare("INSERT INTO posts 
-            (usuario_id, titulo, tema, descricao, conteudo, imagem_capa) 
-            VALUES (?, ?, ?, ?, ?, ?)");
+            (usuario_id, titulo, tema, descricao, conteudo, imagem_capa, video) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-        $stmt->bind_param("isssss", $usuario_id, $titulo, $tema, $descricao, $conteudo, $imagemCapaPath);
+        $imagemCapaPath = !empty($imagemCapaPath) ? $imagemCapaPath : null;
+        $videoPath = !empty($videoPath) ? $videoPath : null;
+
+        $stmt->bind_param("issssss", $usuario_id, $titulo, $tema, $descricao, $conteudo, $imagemCapaPath, $videoPath);
         $stmt->execute();
         $novo_post_id = $conn->insert_id;
 
@@ -145,7 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <title>Criar Post</title>
-    <link rel="stylesheet" href="style/post.css">
+    <link rel="stylesheet" href="style/post.css?v=2">
 </head>
 
 <body>
@@ -161,7 +195,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <form method="POST" enctype="multipart/form-data">
             <h1>Criar Novo Post</h1>
-         
+            <div class="form-group">
+                <label>Video</label>
+                <input type="file" name="video" accept="video/mp4, video/webm">
+                <div class="form-note">Formatos: MP4/WebM (Máx. 200MB)</div>
+            </div>
 
             <!-- Seção de upload de imagens -->
             <div class="form-group">
@@ -169,6 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="file" name="imagem_capa" accept="image/*">
                 <div class="form-note">Formatos: JPG/PNG (Máx. 2MB)</div>
             </div>
+
 
             <div class="form-group">
                 <label>Imagens Adicionais:</label>
@@ -209,6 +248,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" id="tagsInput" placeholder="Ex: tecnologia, programação">
                     <input type="hidden" name="tags" id="hiddenTags">
                     <div id="tagsList"></div>
+                    <small id="tagsError" class="error-message" style="color: red; display: none;">
+                        Pelo menos uma tag é obrigatória
+                    </small>
                 </div>
             </div>
 
@@ -217,10 +259,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
-        // Script para gerenciar tags
         const tagsInput = document.getElementById('tagsInput');
-        const hiddenTags = document.getElementById('hiddenTags');
         const tagsList = document.getElementById('tagsList');
+        const hiddenTags = document.getElementById('hiddenTags');
+
+        function updateHiddenTags() {
+            const tags = Array.from(tagsList.querySelectorAll('.tag'))
+                .map(tag => tag.textContent.replace('×', '').trim());
+
+            hiddenTags.value = tags.join(',');
+            document.getElementById('tagsError').style.display = tags.length ? 'none' : 'block';
+        }
 
         tagsInput.addEventListener('keydown', function(e) {
             if (['Enter', ',', ';'].includes(e.key)) {
@@ -230,9 +279,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     const tagElement = document.createElement('div');
                     tagElement.className = 'tag';
                     tagElement.innerHTML = `
-                        ${tag}
-                        <span class="remove-tag" onclick="this.parentElement.remove()">&times;</span>
-                    `;
+                    ${tag}
+                    <span class="remove-tag" onclick="this.parentElement.remove(); updateHiddenTags()">&times;</span>
+                `;
                     tagsList.appendChild(tagElement);
                     this.value = '';
                     updateHiddenTags();
@@ -240,11 +289,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         });
 
-        function updateHiddenTags() {
-            const tags = Array.from(document.querySelectorAll('.tag'))
-                .map(tag => tag.textContent.replace('×', '').trim());
-            hiddenTags.value = tags.join(',');
-        }
+        // Inicialização
+        updateHiddenTags();
     </script>
 </body>
 

@@ -11,7 +11,7 @@ if (!isset($_SESSION["usuario_id"])) {
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     die("Método inválido");
 }
-
+else{
 // Valida dados
 $seguidor_id = $_SESSION["usuario_id"];
 $seguido_id = filter_input(INPUT_POST, 'seguido_id', FILTER_VALIDATE_INT);
@@ -46,4 +46,5 @@ try {
     error_log("Erro seguir.php: " . $e->getMessage());
     header("Location: " . $_SERVER['HTTP_REFERER'] . "&status=error");
     exit;
+}
 }

@@ -16,8 +16,6 @@ echo "ID recebido: $post_id<br>";
 try {
     $conn->begin_transaction();
 
-    echo "Iniciando transação...<br>";
-
     // Buscar caminhos dos arquivos
     $stmt = $conn->prepare("
         SELECT p.imagem_capa, pi.caminho_arquivo 
@@ -40,7 +38,12 @@ try {
     }
    // echo "Arquivos encontrados: " . implode(", ", $arquivos) . "<br>";
 
-    // Excluir comentários
+  
+    $stmt = $conn->prepare("DELETE FROM posts WHERE video = ?");
+    $stmt->bind_param("i", $post_id);
+    $stmt->execute();
+
+      // Excluir comentários
     $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();

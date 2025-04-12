@@ -1,0 +1,137 @@
+/* Reset básico */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configurações globais */
+body {
+    background-color: #f0f2f5;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Estilização do header */
+header {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+header a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: rgba(52, 152, 219, 0.8);
+    border: 1px solid rgba(52, 152, 219, 0.8);
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+header a:hover {
+    background-color: rgba(52, 152, 219, 0.8);
+    color: #fff;
+}
+
+/* Título principal */
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: #333;
+    text-align: center;
+}
+
+/* Estilização das mensagens de erro */
+.erros {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #c0392b;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.erros p {
+    font-size: 0.9rem;
+    color: #c0392b;
+}
+
+/* Container do formulário */
+form {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Agrupamento dos campos */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Rótulo dos campos */
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+/* Campo de entrada para texto e textarea */
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: rgba(52, 152, 219, 0.2);
+}
+
+/* Estilização específica para avatar-preview */
+.avatar-preview {
+    display: block;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid rgba(52, 152, 219, 0.2);
+    margin-bottom: 10px;
+}
+
+/* Botão de envio */
+button[type="submit"] {
+    background-color: rgba(52, 152, 219, 0.2);
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+    color: #fff;
+}

@@ -84,24 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Editar Perfil</title>
-    <style>
-        .avatar-preview {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 20px 0;
-        }
-        .form-group {
-            margin: 15px 0;
-        }
-        input[type="file"] {
-            margin: 10px 0;
-        }
-        .erros p {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="style/editar-perfil.css">
 </head>
 <body>
     <header>

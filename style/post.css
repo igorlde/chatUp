@@ -1,1 +1,161 @@
+/* Reset básico */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Configurações globais do body */
+body {
+    background-color: #f9f9f9;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container do post */
+.post-creator {
+    background-color: #fff;
+    padding: 30px;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Cabeçalho do formulário */
+.post-creator h1 {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilização das mensagens de erro */
+.alert-error {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-left: 4px solid #c0392b;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert-error p {
+    color: #c0392b;
+    font-size: 0.9rem;
+}
+
+/* Agrupamento de cada campo de formulário */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Rótulo dos campos */
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Notas explicativas (ex.: formatos e tamanhos) */
+.form-note {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+}
+
+/* Entradas de dados e textarea */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="file"],
+.form-group input[type="date"],
+.form-group textarea,
+.form-group select {
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: rgba(52, 152, 219, 0.2);
+}
+
+/* Estilização para textarea */
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Seção de tags */
+.tags-input {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#tagsInput {
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    transition: border-color 0.3s;
+}
+
+#tagsInput:focus {
+    outline: none;
+    border-color: rgba(52, 152, 219, 0.2);
+}
+
+#tagsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Tag individual */
+.tag {
+    background-color: rgba(52, 152, 219, 0.2);
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+.tag .remove-tag {
+    margin-left: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Botão de envio */
+button.btn-primary {
+    background-color: rgba(52, 152, 219, 0.2);
+    border: none;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 12px;
+    width: 100%;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 20px;
+}
+
+button.btn-primary:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+    color: #fff;
+}
 
