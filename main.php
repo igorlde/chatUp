@@ -97,8 +97,16 @@ $conn->close();
                         <input type="text" name="User_name" placeholder="Buscar usuários...">
                         <button type="submit">Buscar</button>
                     </form>
+                    
+                    <!--editar pefil -->
                     <form action="editar-perfil.php" method="post">
                         <button type="submit">Editar Perfil</button>
+                    </form>
+
+                    <!--busca post-->
+                    <form method="post" action="busca-post.php">
+                        <input type="text" name="Title_post" placeholder="Buscar Post">
+                        <button type="submit">Busca post</button>
                     </form>
 
                 </ul>

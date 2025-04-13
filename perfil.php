@@ -62,16 +62,17 @@ if (!$perfilUser) {
         <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">
         <h1><?= htmlspecialchars($perfilUser['nome']) ?></h1>
         
+           <!--Erro resolvido simplemente era o value que estava com o nome errado ai não passava informação para o seguir.php. principalmente na variavel $acao kkk-->
         <?php if ($perfilUser['id'] != $currentUserId): ?>
             <form method="POST" action="seguir.php">
                 <input type="hidden" name="seguido_id" value="<?= $perfilUser['id'] ?>">
                 <?php if ($perfilUser['seguindo']): ?>
-                    <button type="submit" name="acao" value="unfollow" class="btn-unfollow">
+                    <button type="submit" name="acao" value="Deixar de Seguir" class="btn-unfollow">
                         Deixar de Seguir
                     </button>
                 <?php else: ?>
-                    <button type="submit" name="acao" value="follow" class="btn-follow">
-                        Seguir
+                    <button type="submit" name="acao" value="Seguir" class="btn-follow">
+                    Seguir
                     </button>
                 <?php endif; ?>
             </form>

@@ -83,21 +83,6 @@ $conn->close();
                             <h3><?= htmlspecialchars($user['nome']) ?></h3>
                             <div class="action-buttons">
                                 <a href="perfil.php?id=<?= $user['id'] ?>" class="btn-visualizar">Ver Perfil</a>
-                                
-                                <?php if ($user['id'] != $currentUserId): ?>
-                                    <form method="POST" action="seguir.php" class="follow-form">
-                                        <input type="hidden" name="seguido_id" value="<?= $user['id'] ?>">
-                                        <?php if ($user['seguindo']): ?>
-                                            <button type="submit" name="acao" value="unfollow" class="btn-unfollow">
-                                                Deixar de Seguir
-                                            </button>
-                                        <?php else: ?>
-                                            <button type="submit" name="acao" value="follow" class="btn-follow">
-                                                Seguir
-                                            </button>
-                                        <?php endif; ?>
-                                    </form>
-                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

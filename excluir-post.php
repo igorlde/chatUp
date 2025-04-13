@@ -13,6 +13,23 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $post_id = (int)$_GET['id'];
 echo "ID recebido: $post_id<br>";
 
+//matenha esse codigo pois ele verifica se o usuario e o dono do posts.
+$stmt = $conn->prepare("SELECT id, usuario_id FROM posts WHERE id = ?");
+$stmt->bind_param("i", $post_id);
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows === 0) {
+    die("Post não encontrado.");
+}
+
+$stmt->bind_result($db_post_id, $db_usuario_id);
+$stmt->fetch();
+
+if ($_SESSION['usuario_id'] != $db_usuario_id) {
+    die("Você não tem permissão para excluir este post.");
+}
+//Onde começa todo o processo de inicializar a deletação.
 try {
     $conn->begin_transaction();
 
@@ -36,38 +53,32 @@ try {
             $arquivos[] = __DIR__ . '/' . $row['caminho_arquivo'];
         }
     }
-   // echo "Arquivos encontrados: " . implode(", ", $arquivos) . "<br>";
-
-  
     $stmt = $conn->prepare("DELETE FROM posts WHERE video = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-
-      // Excluir comentários
+    // Excluir comentários
     $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-    //echo "Comentários excluídos<br>";
 
     // Excluir tags
     $stmt = $conn->prepare("DELETE FROM post_tags WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-   // echo "Tags excluídas<br>";
 
     // Excluir imagens do post
     $stmt = $conn->prepare("DELETE FROM post_imagens WHERE post_id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
-    //echo "Imagens adicionais excluídas<br>";
 
-    // Excluir o post
+    // Excluir o post (CORRETO)
     $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
     $stmt->bind_param("i", $post_id);
     $stmt->execute();
 
+
     if ($stmt->affected_rows > 0) {
-       // echo "Post excluído<br>";
+        // echo "Post excluído<br>";
     } else {
         echo "NENHUM POST FOI EXCLUÍDO!<br>";
     }
@@ -78,16 +89,14 @@ try {
     foreach ($arquivos as $caminho) {
         if (file_exists($caminho)) {
             unlink($caminho);
-           // echo "Arquivo deletado: $caminho<br>";
-           header("Location: main.php");
-           exit;
+            // echo "Arquivo deletado: $caminho<br>";
+            header("Location: main.php");
+            exit;
         } else {
             echo "Arquivo não encontrado: $caminho<br>";
         }
     }
-
 } catch (Exception $e) {
     $conn->rollback();
     echo "Erro ao excluir: " . $e->getMessage();
 }
-?>

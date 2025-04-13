@@ -19,6 +19,7 @@ $comment_id = (int)$_GET['id'];
 $post_id = (int)$_GET['post_id'];
 $usuario_id = (int)$_SESSION['usuario_id'];
 
+//tem como o dono exluir outros comentarios sem ser o do dele claro se tiver dentro de seu post.
 try {
     // Query corrigida com verificação de propriedade
     $sql = "DELETE FROM comentarios 
@@ -29,11 +30,13 @@ try {
                     SELECT 1 
                     FROM posts 
                     WHERE id = ? 
-                    AND usuario_id = ?
+                   AND usuario_id = ?
                 ))";
+                 //
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiiii", $comment_id, $post_id, $usuario_id, $post_id, $usuario_id);
+    $stmt->bind_param("iiii", $comment_id, $post_id, $usuario_id, $post_id, $usuario_id);
+    //
     
     if (!$stmt->execute()) {
         throw new Exception("Erro na execução: " . $stmt->error);
