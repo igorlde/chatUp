@@ -1,0 +1,138 @@
+/* styles_seguidores.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f6fa;
+    color: #2d3436;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.titulo-principal {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.botao-voltar {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+}
+
+.botao-voltar:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(41, 128, 185, 0.3);
+}
+
+.lista-seguidores {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.card-seguidor {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
+
+.card-seguidor:hover {
+    transform: translateX(10px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #dfe6e9;
+    margin-right: 20px;
+}
+
+.info {
+    flex-grow: 1;
+}
+
+.info h3 {
+    margin: 0;
+    color: #2d3436;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.link-perfil {
+    color: #3498db;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.link-perfil:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.sem-resultados {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 30px;
+    font-style: italic;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .titulo-principal {
+        font-size: 1.5rem;
+    }
+    
+    .card-seguidor {
+        padding: 12px;
+    }
+    
+    .avatar {
+        width: 50px;
+        height: 50px;
+        margin-right: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .botao-voltar {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .lista-seguidores {
+        padding: 15px;
+    }
+}

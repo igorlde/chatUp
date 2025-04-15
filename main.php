@@ -83,9 +83,11 @@ $conn->close();
     <main>
         <header>
             <nav>
-                <!-- Exibição da foto de perfil do usuário logado -->
-                <ul>
+             
+
+                <ul class="mobile-flex-column"><!--parte onde tem ul para o mobile-->
                     <a href="login/login.php">voltar a login</a>
+                       <!-- Exibição da foto de perfil do usuário logado -->
                     <div class="header-profile">
                         <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto de Perfil" class="profile-pic"><!-- deixe esse caminho pois pode dar erro-->
                         <span><?= htmlspecialchars($userData['nome'] ?? '') ?></span>
@@ -183,8 +185,12 @@ $conn->close();
 
                     <?php if (!empty($comentariosPorPost[$post['id']])): ?>
                         <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
+
+                            <!--adicionando div para melhorar o formato no mobile-->
+                            <div class="comentario mobile-column">
                             <div class="comentario">
                                 <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Minha Foto" class="avatar-comentario">
+                                
                                 <div>
                                     <div class="comentario-header">
                                         <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
@@ -208,6 +214,7 @@ $conn->close();
                                 </div>
 
                             </div>
+                            </div><!--feichamento da div do mobile -->
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
@@ -222,8 +229,8 @@ $conn->close();
                     <?php endif; ?>
 
 
-
-                    <form class="form-comentarios" method="POST" action="comentario.php">
+                    <div class="comentarios-trigger">
+                    <form class="form-comentarios" method="POST" action="comentario.php"data-post-id="<?= $post['id'] ?>">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <textarea
                             name="texto"
@@ -231,6 +238,8 @@ $conn->close();
                             required></textarea>
                         <button type="submit" class="btn-comentar">Publicar Comentário</button>
                     </form>
+                    </div>
+                   
 
                 </div>
             </article>
@@ -240,6 +249,7 @@ $conn->close();
             <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
         </div>
     <?php endif; ?>
+
     <script>
         // Rolagem automática para o post após exclusão
         document.addEventListener('DOMContentLoaded', function() {
@@ -297,6 +307,59 @@ $conn->close();
         });
     </script>
 
+<!--script comentario-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Criar elementos flutuantes
+    const floatingComments = document.createElement('div');
+    floatingComments.className = 'comentarios-flutuantes';
+    
+    const trigger = document.createElement('div');
+    trigger.className = 'comentarios-trigger';
+    trigger.textContent = 'Comentar 💬';
+    
+    document.body.append(trigger, floatingComments);
+
+    // Clonar formulário para flutuante
+    document.querySelectorAll('.form-comentarios').forEach(form => {
+        const clone = form.cloneNode(true);
+        clone.classList.add('floating-form');
+        floatingComments.appendChild(clone);
+    });
+
+    // Controle de visibilidade
+    let lastActiveForm = null;
+    
+    window.addEventListener('scroll', () => {
+        const scrollPos = window.scrollY + window.innerHeight;
+        const forms = document.querySelectorAll('.form-comentarios');
+        
+        forms.forEach(form => {
+            const rect = form.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.8 && rect.bottom > 100) {
+                const clone = floatingComments.querySelector(`.floating-form[data-post-id="${form.dataset.postId}"]`);
+                if (clone) {
+                    lastActiveForm = clone;
+                    trigger.style.display = 'block';
+                    floatingComments.classList.add('ativo');
+                }
+            }
+        });
+    });
+
+    // Toggle do formulário
+    trigger.addEventListener('click', () => {
+        floatingComments.classList.toggle('ativo');
+    });
+
+    // Fechar ao clicar fora
+    document.addEventListener('click', (e) => {
+        if (!floatingComments.contains(e.target) && !trigger.contains(e.target)) {
+            floatingComments.classList.remove('ativo');
+        }
+    });
+});
+</script>
 </body>
 
 </html>

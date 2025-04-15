@@ -6,8 +6,8 @@ ini_set('display_errors', 1);
 
 // Configurações de upload
 $diretorioUploads = __DIR__ . '/uploads/posts/';
-$tamanhoMaximo = 2 * 1024 * 1024; // 2MB
-$tamanhoMaximoVideo = 50 * 1024 * 1024;
+$tamanhoMaximo = 30 * 1024 * 1024; // 2MB
+$tamanhoMaximoVideo = 60 * 1024 * 1024;
 $MAXIMO_IMAGEM = 5;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $video = $_FILES['video'];
         
             if ($video['size'] > $tamanhoMaximoVideo) {
-                throw new Exception("O vídeo excede o limite de 200MB");
+                throw new Exception("O vídeo excede o limite de 60MB");
             }
         
             if (!in_array($video['type'], ['video/mp4', 'video/webm'])) {
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Validações
             if ($arquivo['size'] > $tamanhoMaximo) {
-                throw new Exception("Imagem de capa excede 2MB");
+                throw new Exception("Imagem de capa excede 30MB");
             }
             if (!in_array($arquivo['type'], ['image/jpeg', 'image/png'])) {
                 throw new Exception("Formato inválido para capa");
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ];
 
                 if ($arquivo['size'] > $tamanhoMaximo) {
-                    throw new Exception("Imagem {$arquivo['name']} excede 2MB");
+                    throw new Exception("Imagem {$arquivo['name']} excede 30MB");
                 }
                 if (!in_array($arquivo['type'], ['image/jpeg', 'image/png'])) {
                     throw new Exception("Formato inválido para {$arquivo['name']}");
@@ -102,6 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $conteudo = trim($_POST["conteudo"] ?? '');
         $usuario_id = $_SESSION['usuario_id'] ?? null;
 
+        //partes onde arrays de erros são iniciados para fazermos a validação dos campos preenchidos
         $erros = [];
         if (empty(trim($titulo))) $erros[] = "Título é obrigatório";
         if (empty(trim($conteudo))) $erros[] = "Conteúdo não pode estar vazio";
@@ -205,14 +206,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label>Imagem de Capa:</label>
                 <input type="file" name="imagem_capa" accept="image/*">
-                <div class="form-note">Formatos: JPG/PNG (Máx. 2MB)</div>
+                <div class="form-note">Formatos: JPG/PNG (Máx. 30MB)</div>
             </div>
 
 
             <div class="form-group">
                 <label>Imagens Adicionais:</label>
                 <input type="file" name="imagens_adicionais[]" multiple accept="image/*">
-                <div class="form-note">Máximo 5 imagens (2MB cada)</div>
+                <div class="form-note">Máximo 5 imagens (30MB cada)</div>
             </div>
 
             <!-- Restante do formulário mantido -->

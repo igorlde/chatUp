@@ -35,8 +35,7 @@ try {
                  //
     
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiii", $comment_id, $post_id, $usuario_id, $post_id, $usuario_id);
-    //
+    $stmt->bind_param("iiiii", $comment_id, $post_id, $usuario_id, $post_id, $usuario_id);// era so acrecentar mais um i ta bom..
     
     if (!$stmt->execute()) {
         throw new Exception("Erro na execução: " . $stmt->error);

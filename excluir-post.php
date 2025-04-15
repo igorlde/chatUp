@@ -11,7 +11,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $post_id = (int)$_GET['id'];
-echo "ID recebido: $post_id<br>";
+//echo "ID recebido: $post_id<br>";
 
 //matenha esse codigo pois ele verifica se o usuario e o dono do posts.
 $stmt = $conn->prepare("SELECT id, usuario_id FROM posts WHERE id = ?");
@@ -53,29 +53,29 @@ try {
             $arquivos[] = __DIR__ . '/' . $row['caminho_arquivo'];
         }
     }
-    $stmt = $conn->prepare("DELETE FROM posts WHERE video = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-    // Excluir comentários
-    $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-
-    // Excluir tags
-    $stmt = $conn->prepare("DELETE FROM post_tags WHERE post_id = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-
-    // Excluir imagens do post
-    $stmt = $conn->prepare("DELETE FROM post_imagens WHERE post_id = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-
-    // Excluir o post (CORRETO)
-    $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
-    $stmt->bind_param("i", $post_id);
-    $stmt->execute();
-
+        $conn->begin_transaction();
+    
+    
+    
+        // Excluir comentários
+        $stmt = $conn->prepare("DELETE FROM comentarios WHERE post_id = ?");
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
+    
+        // Excluir tags 
+        $stmt = $conn->prepare("DELETE FROM post_tags WHERE post_id = ?");
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
+    
+        // Excluir imagens do post 
+        $stmt = $conn->prepare("DELETE FROM post_imagens WHERE post_id = ?");
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
+    
+        // Excluir o post 
+        $stmt = $conn->prepare("DELETE FROM posts WHERE id = ?");
+        $stmt->bind_param("i", $post_id);
+        $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
         // echo "Post excluído<br>";
