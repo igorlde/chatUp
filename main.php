@@ -83,11 +83,11 @@ $conn->close();
     <main>
         <header>
             <nav>
-             
+
 
                 <ul class="mobile-flex-column"><!--parte onde tem ul para o mobile-->
                     <a href="login/login.php">voltar a login</a>
-                       <!-- Exibição da foto de perfil do usuário logado -->
+                    <!-- Exibição da foto de perfil do usuário logado -->
                     <div class="header-profile">
                         <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto de Perfil" class="profile-pic"><!-- deixe esse caminho pois pode dar erro-->
                         <span><?= htmlspecialchars($userData['nome'] ?? '') ?></span>
@@ -99,7 +99,7 @@ $conn->close();
                         <input type="text" name="User_name" placeholder="Buscar usuários...">
                         <button type="submit">Buscar</button>
                     </form>
-                    
+
                     <!--editar pefil -->
                     <form action="editar-perfil.php" method="post">
                         <button type="submit">Editar Perfil</button>
@@ -180,28 +180,23 @@ $conn->close();
                     <?php unset($_SESSION['sucesso']); ?>
                 <?php endif; ?>
 
-                <div class="comentarios">
+
+                <button type="button" class="btn-toggle" data-post="<?= $post['id'] ?>">Mostrar comentários</button>
+                <div id="comentarios-container-<?= $post['id'] ?>" class="comentarios-container" style="display:none;">
                     <h3>Comentários (<?= count($comentariosPorPost[$post['id']] ?? []) ?>)</h3>
 
                     <?php if (!empty($comentariosPorPost[$post['id']])): ?>
                         <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
-
-                            <!--adicionando div para melhorar o formato no mobile-->
                             <div class="comentario mobile-column">
-                            <div class="comentario">
-                                <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Minha Foto" class="avatar-comentario">
-                                
+                                <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto" class="avatar-comentario">
                                 <div>
                                     <div class="comentario-header">
                                         <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
                                         <span class="comentario-data"><?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?></span>
                                     </div>
                                     <p class="comentario-texto"><?= nl2br(htmlspecialchars($comentario['texto'])) ?></p>
-                                    <!--excluir comentarios-->
-                                    <!-- Botão de exclusão somente se o usuário for o autor -->
 
                                     <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
-
                                         <form action="excluir-comentarios.php" method="get" class="form-exclusao">
                                             <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
                                             <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
@@ -212,38 +207,37 @@ $conn->close();
                                         </form>
                                     <?php endif; ?>
                                 </div>
-
                             </div>
-                            </div><!--feichamento da div do mobile -->
                         <?php endforeach; ?>
                     <?php else: ?>
                         <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
                     <?php endif; ?>
 
-                    <!--botao de exclusao -->
                     <?php if ($post['usuario_id'] == $_SESSION['usuario_id']): ?>
                         <form method="GET" action="excluir-post.php" onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
                             <input type="hidden" name="id" value="<?= $post['id'] ?>">
-                            <button type="submit">Excluir</button>
+                            <button type="submit" class="btn-excluir-post">Excluir Post</button>
                         </form>
                     <?php endif; ?>
 
-
-                    <div class="comentarios-trigger">
-                    <form class="form-comentarios" method="POST" action="comentario.php"data-post-id="<?= $post['id'] ?>">
-                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                        <textarea
-                            name="texto"
-                            placeholder="Escreva seu comentário..."
-                            required></textarea>
-                        <button type="submit" class="btn-comentar">Publicar Comentário</button>
-                    </form>
+                    <!-- Formulário original que será clonado para a área flutuante -->
+                    <!-- Barra fixa para postar comentário -->
+                    <!-- Barra fixa para comentar (única para toda a página) -->
+                    <div id="fixedCommentBar" class="fixed-comment-bar">
+                        <form class="form-comentarios" method="POST" action="comentario.php">
+                            <!-- Campo oculto para identificar qual post será comentado -->
+                            <input type="hidden" name="post_id" id="fixedBarPostId" value="">
+                            <textarea name="texto" placeholder="Escreva seu comentário..." required></textarea>
+                            <button type="submit">Publicar</button>
+                        </form>
                     </div>
-                   
+
+
 
                 </div>
             </article>
         <?php endforeach; ?>
+     
     <?php else: ?>
         <div class="no-posts">
             <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
@@ -306,60 +300,32 @@ $conn->close();
             }
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleciona todos os botões que controlam os comentários
+            const btnToggleList = document.querySelectorAll('.btn-toggle');
 
-<!--script comentario-->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Criar elementos flutuantes
-    const floatingComments = document.createElement('div');
-    floatingComments.className = 'comentarios-flutuantes';
-    
-    const trigger = document.createElement('div');
-    trigger.className = 'comentarios-trigger';
-    trigger.textContent = 'Comentar 💬';
-    
-    document.body.append(trigger, floatingComments);
+            btnToggleList.forEach(function(btnToggle) {
+                btnToggle.addEventListener('click', function() {
+                    // Obtém o ID do post a partir do atributo data-post
+                    const postId = btnToggle.getAttribute('data-post');
+                    // Seleciona o container de comentários correspondente
+                    const comentariosContainer = document.getElementById('comentarios-container-' + postId);
 
-    // Clonar formulário para flutuante
-    document.querySelectorAll('.form-comentarios').forEach(form => {
-        const clone = form.cloneNode(true);
-        clone.classList.add('floating-form');
-        floatingComments.appendChild(clone);
-    });
-
-    // Controle de visibilidade
-    let lastActiveForm = null;
-    
-    window.addEventListener('scroll', () => {
-        const scrollPos = window.scrollY + window.innerHeight;
-        const forms = document.querySelectorAll('.form-comentarios');
-        
-        forms.forEach(form => {
-            const rect = form.getBoundingClientRect();
-            if (rect.top < window.innerHeight * 0.8 && rect.bottom > 100) {
-                const clone = floatingComments.querySelector(`.floating-form[data-post-id="${form.dataset.postId}"]`);
-                if (clone) {
-                    lastActiveForm = clone;
-                    trigger.style.display = 'block';
-                    floatingComments.classList.add('ativo');
-                }
-            }
+                    // Alterna a exibição do container dos comentários
+                    if (comentariosContainer.style.display === "none" || comentariosContainer.style.display === "") {
+                        comentariosContainer.style.display = "block";
+                        btnToggle.textContent = "Ocultar comentários";
+                    } else {
+                        comentariosContainer.style.display = "none";
+                        btnToggle.textContent = "Mostrar comentários";
+                    }
+                });
+            });
         });
-    });
+    </script>
 
-    // Toggle do formulário
-    trigger.addEventListener('click', () => {
-        floatingComments.classList.toggle('ativo');
-    });
 
-    // Fechar ao clicar fora
-    document.addEventListener('click', (e) => {
-        if (!floatingComments.contains(e.target) && !trigger.contains(e.target)) {
-            floatingComments.classList.remove('ativo');
-        }
-    });
-});
-</script>
 </body>
 
 </html>
