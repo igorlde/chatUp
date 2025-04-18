@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 require_once __DIR__ . '/seguidores.php';
 if (!isset($_SESSION['usuario_id'])) {

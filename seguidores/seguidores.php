@@ -75,3 +75,4 @@ function getListSeguindo($user_id, $conn)
     $sql->execute();
     return $sql->get_result()->fetch_all(MYSQLI_ASSOC);
 }
+?>

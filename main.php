@@ -110,6 +110,9 @@ $conn->close();
                         <input type="text" name="Title_post" placeholder="Buscar Post">
                         <button type="submit">Busca post</button>
                     </form>
+                    <form action="chat.php" method="get">
+                        <button type="submit">Conversa</button>
+                    </form>
 
                 </ul>
 
@@ -188,56 +191,56 @@ $conn->close();
                     <?php if (!empty($comentariosPorPost[$post['id']])): ?>
                         <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
                             <div class="comentario mobile-column">
-                                <img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto" class="avatar-comentario">
+                                <img src="uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
+                                    alt="<?= htmlspecialchars($comentario['autor'] ?? 'Usuário') ?>"
+                                    class="avatar-comentario"> <!-- Classe mantida -->
                                 <div>
-                                    <div class="comentario-header">
-                                        <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
-                                        <span class="comentario-data"><?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?></span>
+                                    <div>
+                                        <div class="comentario-header">
+                                            <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
+                                            <span class="comentario-data"><?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?></span>
+                                        </div>
+                                        <p class="comentario-texto"><?= nl2br(htmlspecialchars($comentario['texto'])) ?></p>
+
+                                        <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                                            <form action="excluir-comentarios.php" method="get" class="form-exclusao">
+                                                <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
+                                                <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                                                <button type="submit" class="btn-excluir"
+                                                    onclick="return confirm('Tem certeza? Esta ação é irreversível!')">
+                                                    🗑️ Excluir
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
                                     </div>
-                                    <p class="comentario-texto"><?= nl2br(htmlspecialchars($comentario['texto'])) ?></p>
-
-                                    <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
-                                        <form action="excluir-comentarios.php" method="get" class="form-exclusao">
-                                            <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
-                                            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                                            <button type="submit" class="btn-excluir"
-                                                onclick="return confirm('Tem certeza? Esta ação é irreversível!')">
-                                                🗑️ Excluir
-                                            </button>
-                                        </form>
-                                    <?php endif; ?>
                                 </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                        <?php endif; ?>
+
+                        <?php if ($post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                            <form method="GET" action="excluir-post.php" onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
+                                <input type="hidden" name="id" value="<?= $post['id'] ?>">
+                                <button type="submit" class="btn-excluir-post">Excluir Post</button>
+                            </form>
+                        <?php endif; ?>
+
+                        <!-- Formulário original que será clonado para a área flutuante -->
+                        <!-- Barra fixa para postar comentário -->
+                        <!-- Barra fixa para comentar (única para toda a página) -->
+                        <form method="POST" action="comentario.php" class="form-comentario">
+                            <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                            <textarea name="texto" required></textarea>
+                            <button type="submit">Comentar</button>
+                        </form>
+
+
+
                             </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
-                    <?php endif; ?>
-
-                    <?php if ($post['usuario_id'] == $_SESSION['usuario_id']): ?>
-                        <form method="GET" action="excluir-post.php" onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
-                            <input type="hidden" name="id" value="<?= $post['id'] ?>">
-                            <button type="submit" class="btn-excluir-post">Excluir Post</button>
-                        </form>
-                    <?php endif; ?>
-
-                    <!-- Formulário original que será clonado para a área flutuante -->
-                    <!-- Barra fixa para postar comentário -->
-                    <!-- Barra fixa para comentar (única para toda a página) -->
-                    <div id="fixedCommentBar" class="fixed-comment-bar">
-                        <form class="form-comentarios" method="POST" action="comentario.php">
-                            <!-- Campo oculto para identificar qual post será comentado -->
-                            <input type="hidden" name="post_id" id="fixedBarPostId" value="">
-                            <textarea name="texto" placeholder="Escreva seu comentário..." required></textarea>
-                            <button type="submit">Publicar</button>
-                        </form>
-                    </div>
-
-
-
-                </div>
             </article>
         <?php endforeach; ?>
-     
+
     <?php else: ?>
         <div class="no-posts">
             <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
