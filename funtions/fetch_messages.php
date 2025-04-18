@@ -1,56 +1,58 @@
 <?php
 session_start();
-header('Content-Type: application/json'); // Adiciona cabeçalho JSON
+header('Content-Type: application/json');
 
-include("../connector_database/connector.php");
+include '../connector_database/connector.php';
 
 try {
-    // Verifica autenticação e parâmetros
+    // Verificar autenticação
     if (!isset($_SESSION['usuario_id'])) {
-        throw new Exception("Usuário não autenticado");
-    }
-    
-    if (!isset($_GET['user']) || !ctype_digit($_GET['user'])) {
-        throw new Exception("Parâmetro inválido");
+        throw new Exception("Acesso não autorizado");
     }
 
+    // Validar parâmetro
     $my_id = $_SESSION['usuario_id'];
-    $other_id = (int)$_GET['user'];
+    $other_id = isset($_GET['user']) ? (int)$_GET['user'] : null;
 
-    // Corrigindo a consulta usando PDO corretamente
-    $stmt = $pdo->prepare("SELECT 
-            mensagem AS msg, 
-            remetente_id, 
-            data_envio 
-        FROM mensagens 
-        WHERE 
-            (remetente_id = :my_id AND destinatario_id = :other_id) OR 
-            (remetente_id = :other_id AND destinatario_id = :my_id) 
-        ORDER BY data_envio ASC");
-
-    // Executa com parâmetros nomeados
-    $stmt->execute([
-        ':my_id' => $my_id,
-        ':other_id' => $other_id
-    ]);
-
-    // Corrigindo o fetch para PDO
-    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Construindo resposta estruturada
-    $response = [
-        'success' => true,
-        'html' => ''
-    ];
-
-    foreach ($messages as $msg) {
-        $class = $msg['remetente_id'] == $my_id ? 'sent' : 'received';
-        $response['html'] .= "<div class='chat-message $class'>" 
-                            . htmlspecialchars($msg['msg']) 
-                            . "</div>";
+    if (!$other_id || $other_id < 1) {
+        throw new Exception("ID de conversa inválido");
     }
 
-    echo json_encode($response);
+    // Buscar mensagens
+    $stmt = $conn->prepare("
+        SELECT 
+            m.mensagem,
+            m.remetente_id,
+            DATE_FORMAT(m.data_envio, '%d/%m/%Y %H:%i') as data_envio,
+            u.avatar
+        FROM mensagens m
+        JOIN users u ON m.remetente_id = u.id
+        WHERE 
+            (m.remetente_id = ? AND m.destinatario_id = ?)
+            OR 
+            (m.remetente_id = ? AND m.destinatario_id = ?)
+        ORDER BY m.data_envio ASC
+    ");
+
+    $stmt->bind_param("iiii", $my_id, $other_id, $other_id, $my_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Gerar HTML
+    $html = '';
+    while ($row = $result->fetch_assoc()) {
+        $class = ($row['remetente_id'] == $my_id) ? 'sent' : 'destinatario';
+        $html .= '
+        <div class="chat-message ' . $class . '">
+            <div class="msg-text">' . htmlspecialchars($row['mensagem']) . '</div>
+            <div class="msg-time">' . $row['data_envio'] . '</div>
+        </div>';
+    }
+
+    echo json_encode([
+        'success' => true,
+        'html' => $html
+    ]);
 
 } catch (Exception $e) {
     http_response_code(500);
@@ -59,4 +61,8 @@ try {
         'error' => $e->getMessage()
     ]);
 }
+
+// Fechar conexão
+if (isset($stmt)) $stmt->close();
+if (isset($conn)) $conn->close();
 ?>

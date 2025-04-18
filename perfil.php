@@ -3,7 +3,7 @@ session_start();
 include("connector_database/connector.php");
 
 //verficação a mais oara ver o id 
-if (!isset($_GET['id'])){
+if (!isset($_GET['id'])) {
     // Se nenhum ID foi passado, redirecione para o próprio perfil do usuário
     if (isset($_SESSION['usuario_id'])) {
         header("Location: perfil.php?id=" . $_SESSION['usuario_id']);
@@ -83,6 +83,11 @@ if (!$perfilUser) {
     <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">
     <h1><?= htmlspecialchars($perfilUser['nome']) ?></h1>
     <!--Erro resolvido simplemente era o value que estava com o nome errado ai não passava informação para o seguir.php. principalmente na variavel $acao kkk-->
+    <li>
+        <form action="editar-perfil.php" method="post">
+            <button type="submit">Editar Perfil</button>
+        </form>
+    </li>
     <?php if ($perfilUser['id'] != $currentUserId): ?>
         <form method="POST" action="seguir.php">
             <input type="hidden" name="seguido_id" value="<?= $perfilUser['id'] ?>">

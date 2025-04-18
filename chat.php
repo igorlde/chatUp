@@ -76,7 +76,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
             <?php if ($selecionar_usuario_id && $conversa_usuario): ?>
                 <div class="chat-header">
                     <a href="perfil.php?id-<?= $selecionar_usuario_id ?>">
-                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? 'default.jpg' ?>" class="chat-avatar">
+                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? ''?>" class="chat-avatar">
                     </a>
                     <h4>@<?= htmlspecialchars($conversa_usuario['nome_usuario']) ?></h4>
                 </div>
@@ -98,48 +98,48 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
         </div>
     </div>
 
-<script>
+    <script>
+        // Verifica se o parâmetro user existe
+        let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
 
-    
-// Verifica se o parâmetro user existe
-let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
-
-if(destinatario) {
-    function fetchMessages() {
-        fetch('/projeto_ed_feito/functions/fetch_messages.php?user=' + destinatario)// Corrigido caminho
-            .then(res => res.json()) // Espera JSON
-            .then(data => {
-                const messagesContainer = document.querySelector('.chat-messages');
-                messagesContainer.innerHTML = data.messages;
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
-    }
-
-    // Envia mensagem com AJAX
-    document.querySelector('.chat-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        formData.append('receiver_id', destinatario);
-
-        fetch('functions/send_menssage.php', { // Corrigido caminho
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if(data.success) {
-                this.reset();
-                fetchMessages();
+        if (destinatario) {
+            function fetchMessages() {
+                // Corrigido: caminho absoluto para fetch_messages.php
+                fetch('/projeto_ed_feito/funtions/fetch_messages.php?user=' + destinatario)
+                    .then(res => res.json())
+                    .then(data => {
+                        const messagesContainer = document.querySelector('.chat-menssages');
+                        messagesContainer.innerHTML = data.html; // Campo correto: 'html'
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    });
             }
-        });
-    });
 
-    // Atualiza mensagens a cada 2 segundos
-    setInterval(fetchMessages, 2000);
-    fetchMessages();
-}
-</script>
+            // Envia mensagem com AJAX
+            document.querySelector('.chat-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                formData.append('receiver_id', destinatario);
+
+                // Corrigido: caminho e nome do arquivo
+                fetch('/projeto_ed_feito/funtions/send_menssage.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.reset();
+                            fetchMessages();
+                        }
+                    });
+            });
+
+            // Atualiza mensagens a cada 2 segundos
+            setInterval(fetchMessages, 500);
+            fetchMessages();
+        }
+    </script>
 </body>
 
 </html>
