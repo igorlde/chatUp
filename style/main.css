@@ -206,3 +206,27 @@ body {
     padding: 50px 20px;
     color: #8e8e8e;
 }
+
+/* Likes */
+.btn-curtir {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: transform 0.2s;
+}
+
+.btn-curtir:hover {
+    transform: scale(1.2);
+}
+.btn-dislike{
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size:1.2em;
+    transition: transform 0.2s;
+}
+.btn-dislike:hover{
+    transform: scale(1.2);
+}
+    

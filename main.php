@@ -21,30 +21,50 @@ $userData = $resultUser->fetch_assoc();
 $avatar = !empty($userData['avatar']) ? $userData['avatar'] : 'default-avatar.jpg';
 $stmtUser->close();
 
+//consulta da logica de aparecer nosso post curtidas e etc
 $query = "SELECT 
-            p.*, 
-            u.nome as autor,
-            GROUP_CONCAT(DISTINCT t.nome_tag) as tags,
+            p.id,
+            p.usuario_id,
+            p.titulo,
+            p.conteudo,
+            p.data_publicacao,
             p.imagem_capa,
-            GROUP_CONCAT(DISTINCT pi.caminho_arquivo) as imagens_adicionais
+            u.nome as autor,
+
+            -- Tags (Subquery)
+            (SELECT GROUP_CONCAT(DISTINCT t.nome_tag) 
+             FROM post_tags pt 
+             INNER JOIN tags t ON pt.tag_id = t.id 
+             WHERE pt.post_id = p.id) as tags,
+
+            (SELECT GROUP_CONCAT(DISTINCT pi.caminho_arquivo) 
+             FROM post_imagens pi 
+             WHERE pi.post_id = p.id) as imagens_adicionais,
+            --contado curtidas
+            (SELECT COUNT(DISTINCT c.id) 
+             FROM curtidas c 
+             WHERE c.post_id = p.id) as curtidas,
+            --contado dislikes
+            (SELECT COUNT(DISTINCT d.id) 
+             FROM descurtidas d 
+             WHERE d.post_id = p.id) as descurtidas
+            --Ordenado por curtidas e data de publicação
           FROM posts p
           INNER JOIN users u ON p.usuario_id = u.id
-          LEFT JOIN post_tags pt ON p.id = pt.post_id
-          LEFT JOIN tags t ON pt.tag_id = t.id
-          LEFT JOIN post_imagens pi ON p.id = pi.post_id
-          GROUP BY p.id
-          ORDER BY p.data_publicacao DESC";
+          ORDER BY curtidas DESC, p.data_publicacao DESC";
 
 $posts = [];
 $comentariosPorPost = [];
 
 if ($result = $conn->query($query)) {
     while ($row = $result->fetch_assoc()) {
-        // Processar campos
+        // Converter strings para arrays
         $row['tags'] = $row['tags'] ? explode(',', $row['tags']) : [];
         $row['imagens_adicionais'] = $row['imagens_adicionais'] ? explode(',', $row['imagens_adicionais']) : [];
-        $posts[] = $row;
+        $row['curtidas'] = (int)$row['curtidas'];
+        $row['descurtidas'] = (int)$row['descurtidas'];
 
+        $posts[] = $row;
         // Buscar comentários
         $stmtComentarios = $conn->prepare("
              SELECT 
@@ -54,10 +74,10 @@ if ($result = $conn->query($query)) {
         u.id as usuario_id,
         u.nome as autor,
         u.avatar as autor_avatar
-    FROM comentarios c
-    INNER JOIN users u ON c.usuario_id = u.id
-    WHERE c.post_id = ?
-    ORDER BY c.data_comentario DESC
+        FROM comentarios c
+        INNER JOIN users u ON c.usuario_id = u.id
+        WHERE c.post_id = ?
+        ORDER BY c.data_comentario DESC
         ");
         $stmtComentarios->bind_param("i", $row['id']);
         $stmtComentarios->execute();
@@ -66,6 +86,7 @@ if ($result = $conn->query($query)) {
     }
     $result->free();
 }
+
 $conn->close();
 
 ?>
@@ -83,6 +104,7 @@ $conn->close();
 <body>
     <?php include 'sidebar.php'; ?>
     <!-- codigo valiosos-->
+    <!--<pre><//?=// print_r($posts, true) ?></pre>-->
     <div class="aba-post">
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>
@@ -141,7 +163,21 @@ $conn->close();
                         <?php unset($_SESSION['sucesso']); ?>
                     <?php endif; ?>
 
+                    <!--logica das curtidas dentro do main.php -->
+                    <form action="funtions/likes-functions.php" method="post">
+                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                        <button type="submit" class="btn-curtir">
+                            👍 <?= $post['curtidas'] ?? 0 ?>
+                        </button>
+                    </form>
+                    <!--logica de deslike-->
+                    <form action="funtions/deslike-functions.php" method="post">
+                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                        <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
+                    </form>
 
+
+                    <!--mostrar comentarios-->
                     <button type="button" class="btn-toggle" data-post="<?= $post['id'] ?>">Mostrar comentários</button>
                     <div id="comentarios-container-<?= $post['id'] ?>" class="comentarios-container" style="display:none;">
                         <h3>Comentários (<?= count($comentariosPorPost[$post['id']] ?? []) ?>)</h3>
@@ -176,7 +212,6 @@ $conn->close();
                             <?php else: ?>
                                 <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>
                             <?php endif; ?>
-
                             <?php if ($post['usuario_id'] == $_SESSION['usuario_id']): ?>
                                 <form method="GET" action="excluir-post.php" onsubmit="return confirm('Tem certeza que deseja excluir este post?');">
                                     <input type="hidden" name="id" value="<?= $post['id'] ?>">
@@ -199,91 +234,89 @@ $conn->close();
         <?php else: ?>
             <div class="no-posts">
                 <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
-            </div>
-        <?php endif; ?>
-    </div>
-    <script>
-        // Rolagem automática para o post após exclusão
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const postId = urlParams.get('post_id');
+            <?php endif; ?>
 
-            if (postId) {
-                const postElement = document.getElementById(`post-${postId}`);
-                if (postElement) {
-                    postElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+            <script>
+                // Rolagem automática para o post após exclusão
+                document.addEventListener('DOMContentLoaded', function() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const postId = urlParams.get('post_id');
 
-                    // Destacar o post
-                    postElement.style.transition = 'all 0.5s';
-                    postElement.style.boxShadow = '0 0 15px rgba(52, 152, 219, 0.5)';
-
-                    setTimeout(() => {
-                        postElement.style.boxShadow = 'none';
-                    }, 2000);
-                }
-            }
-        });
-    </script>
-    <!--ao comentar sera rolado ate onde comentou-->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-
-            // Scroll para comentários se houver parâmetro
-            if (urlParams.has('comentario')) {
-                const postId = urlParams.get('post_id');
-                const comentarioStatus = document.getElementById('comentario-status');
-
-                if (postId) {
-                    const targetSection = document.getElementById(`comentarios-post-${postId}`);
-                    if (targetSection) {
-                        setTimeout(() => {
-                            targetSection.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
+                    if (postId) {
+                        const postElement = document.getElementById(`post-${postId}`);
+                        if (postElement) {
+                            postElement.scrollIntoView({
+                                behavior: 'smooth'
                             });
-                        }, 500);
-                    }
-                }
 
-                // Remove a notificação após 5 segundos
-                if (comentarioStatus) {
-                    setTimeout(() => {
-                        comentarioStatus.style.transform = 'translateX(150%)';
-                        setTimeout(() => comentarioStatus.remove(), 500);
-                    }, 5000);
-                }
-            }
-        });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Seleciona todos os botões que controlam os comentários
-            const btnToggleList = document.querySelectorAll('.btn-toggle');
+                            // Destacar o post
+                            postElement.style.transition = 'all 0.5s';
+                            postElement.style.boxShadow = '0 0 15px rgba(52, 152, 219, 0.5)';
 
-            btnToggleList.forEach(function(btnToggle) {
-                btnToggle.addEventListener('click', function() {
-                    // Obtém o ID do post a partir do atributo data-post
-                    const postId = btnToggle.getAttribute('data-post');
-                    // Seleciona o container de comentários correspondente
-                    const comentariosContainer = document.getElementById('comentarios-container-' + postId);
-
-                    // Alterna a exibição do container dos comentários
-                    if (comentariosContainer.style.display === "none" || comentariosContainer.style.display === "") {
-                        comentariosContainer.style.display = "block";
-                        btnToggle.textContent = "Ocultar comentários";
-                    } else {
-                        comentariosContainer.style.display = "none";
-                        btnToggle.textContent = "Mostrar comentários";
+                            setTimeout(() => {
+                                postElement.style.boxShadow = 'none';
+                            }, 2000);
+                        }
                     }
                 });
-            });
-        });
-    </script>
+            </script>
+            <!--ao comentar sera rolado ate onde comentou-->
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const urlParams = new URLSearchParams(window.location.search);
 
+                    // Scroll para comentários se houver parâmetro
+                    if (urlParams.has('comentario')) {
+                        const postId = urlParams.get('post_id');
+                        const comentarioStatus = document.getElementById('comentario-status');
 
+                        if (postId) {
+                            const targetSection = document.getElementById(`comentarios-post-${postId}`);
+                            if (targetSection) {
+                                setTimeout(() => {
+                                    targetSection.scrollIntoView({
+                                        behavior: 'smooth',
+                                        block: 'start'
+                                    });
+                                }, 500);
+                            }
+                        }
+
+                        // Remove a notificação após 5 segundos
+                        if (comentarioStatus) {
+                            setTimeout(() => {
+                                comentarioStatus.style.transform = 'translateX(150%)';
+                                setTimeout(() => comentarioStatus.remove(), 500);
+                            }, 5000);
+                        }
+                    }
+                });
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Seleciona todos os botões que controlam os comentários
+                    const btnToggleList = document.querySelectorAll('.btn-toggle');
+
+                    btnToggleList.forEach(function(btnToggle) {
+                        btnToggle.addEventListener('click', function() {
+                            // Obtém o ID do post a partir do atributo data-post
+                            const postId = btnToggle.getAttribute('data-post');
+                            // Seleciona o container de comentários correspondente
+                            const comentariosContainer = document.getElementById('comentarios-container-' + postId);
+
+                            // Alterna a exibição do container dos comentários
+                            if (comentariosContainer.style.display === "none" || comentariosContainer.style.display === "") {
+                                comentariosContainer.style.display = "block";
+                                btnToggle.textContent = "Ocultar comentários";
+                            } else {
+                                comentariosContainer.style.display = "none";
+                                btnToggle.textContent = "Mostrar comentários";
+                            }
+                        });
+                    });
+                });
+            </script>
+            </div>
 </body>
 
 </html>
