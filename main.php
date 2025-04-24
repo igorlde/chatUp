@@ -29,9 +29,10 @@ $query = "SELECT
             p.conteudo,
             p.data_publicacao,
             p.imagem_capa,
+            p.video,
             u.nome as autor,
 
-            -- Tags (Subquery)
+            /* Tags (Subquery)*/
             (SELECT GROUP_CONCAT(DISTINCT t.nome_tag) 
              FROM post_tags pt 
              INNER JOIN tags t ON pt.tag_id = t.id 
@@ -40,15 +41,15 @@ $query = "SELECT
             (SELECT GROUP_CONCAT(DISTINCT pi.caminho_arquivo) 
              FROM post_imagens pi 
              WHERE pi.post_id = p.id) as imagens_adicionais,
-            --contado curtidas
+                        /*contado curtidas*/
             (SELECT COUNT(DISTINCT c.id) 
              FROM curtidas c 
              WHERE c.post_id = p.id) as curtidas,
-            --contado dislikes
+            /*contado dislikes*/
             (SELECT COUNT(DISTINCT d.id) 
              FROM descurtidas d 
              WHERE d.post_id = p.id) as descurtidas
-            --Ordenado por curtidas e data de publicação
+            /*Ordenado por curtidas e data de publicação*/
           FROM posts p
           INNER JOIN users u ON p.usuario_id = u.id
           ORDER BY curtidas DESC, p.data_publicacao DESC";
@@ -122,6 +123,7 @@ $conn->close();
                             class="post-capa"
                             alt="Capa do post">
                     <?php endif; ?>
+                    
                     <!-- Seção de Vídeo (adicionar após a imagem de capa) -->
                     <?php if (!empty($post['video'])): ?>
                         <div class="video-container">
@@ -136,6 +138,7 @@ $conn->close();
                         <p class="post-description"><?= htmlspecialchars($post['descricao']) ?></p>
                     <?php endif; ?>
 
+                        <!--conteudo do post-->
                     <div class="post-content"><?= nl2br(htmlspecialchars($post['conteudo'])) ?></div>
 
                     <?php if (!empty($post['imagens_adicionais'])): ?>
@@ -184,19 +187,23 @@ $conn->close();
 
                         <?php if (!empty($comentariosPorPost[$post['id']])): ?>
                             <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
+                                <!--Div para estilizar os comentarios no mobile-->
                                 <div class="comentario mobile-column">
                                     <img src="uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
                                         alt="<?= htmlspecialchars($comentario['autor'] ?? 'Usuário') ?>"
                                         class="avatar-comentario"> <!-- Classe mantida -->
                                     <div>
                                         <div>
+                                            <!--cabeçalho do comentario-->
                                             <div class="comentario-header">
                                                 <span class="comentario-autor"><?= htmlspecialchars($comentario['autor']) ?></span>
                                                 <span class="comentario-data"><?= date('d/m/Y H:i', strtotime($comentario['data_comentario'])) ?></span>
                                             </div>
+                                            <!--Comentario-->
                                             <p class="comentario-texto"><?= nl2br(htmlspecialchars($comentario['texto'])) ?></p>
 
                                             <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
+                                                <!-- função html excluir comentarios-->
                                                 <form action="excluir-comentarios.php" method="get" class="form-exclusao">
                                                     <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
                                                     <input type="hidden" name="post_id" value="<?= $post['id'] ?>">

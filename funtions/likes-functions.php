@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $check_sql->execute();
 
         if ($check_sql->get_result()->num_rows > 0) {
+            //coloque aqui uma função para tirar sua curtida
             throw new Exception("Você já curtiu este post");
         }
 

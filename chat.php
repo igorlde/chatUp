@@ -76,7 +76,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
             <?php if ($selecionar_usuario_id && $conversa_usuario): ?>
                 <div class="chat-header">
                     <a href="perfil.php?id-<?= $selecionar_usuario_id ?>">
-                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? ''?>" class="chat-avatar">
+                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? '' ?>" class="chat-avatar">
                     </a>
                     <h4>@<?= htmlspecialchars($conversa_usuario['nome_usuario']) ?></h4>
                 </div>
@@ -88,7 +88,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
                     <?php endforeach; ?>
                 </div>
                 <form action="funtions/send_menssage.php" method="post" class="chat-form">
-                    <input type="hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
+                    <input type = "hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
                     <input type="text" name="msg" placeholder="Digite sua mensagem" required>
                     <button type="submit">Enviar</button>
                 </form>
@@ -97,7 +97,6 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
             <?php endif; ?>
         </div>
     </div>
-
     <script>
         // Verifica se o parâmetro user existe
         let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;

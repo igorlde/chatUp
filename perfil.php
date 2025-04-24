@@ -69,7 +69,7 @@ if (!$perfilUser) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -83,11 +83,6 @@ if (!$perfilUser) {
     <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">
     <h1><?= htmlspecialchars($perfilUser['nome']) ?></h1>
     <!--Erro resolvido simplemente era o value que estava com o nome errado ai não passava informação para o seguir.php. principalmente na variavel $acao kkk-->
-    <li>
-        <form action="editar-perfil.php" method="post">
-            <button type="submit">Editar Perfil</button>
-        </form>
-    </li>
     <?php if ($perfilUser['id'] != $currentUserId): ?>
         <form method="POST" action="seguir.php">
             <input type="hidden" name="seguido_id" value="<?= $perfilUser['id'] ?>">
@@ -113,6 +108,9 @@ if (!$perfilUser) {
             🔍 Seguindo
         </button>
     </form>
+</div>
+<div class="conteudo-dos-usuario">
+            <?php include("funtions/fuction-postPerfil.php");?>
 </div>
 </body>
 

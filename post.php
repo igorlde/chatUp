@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("O vídeo excede o limite de 60MB");
             }
         
-            if (!in_array($video['type'], ['video/mp4', 'video/webm'])) {
+            if (!in_array($video['type'], ['video/mp4', 'video/webm', 'video/.mov'])) {
                 throw new Exception("Formato inválido (MP4/WebM)");
             }
         

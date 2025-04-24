@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $_SESSION['error'] = $e->getMessage();
     }
-    
     header("Location: ../main.php");
     exit;
 }

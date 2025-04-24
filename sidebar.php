@@ -63,6 +63,9 @@ $stmtUser->close();
                     <button type="submit">💬 Bate-papo</button>
                 </form>
             </li>
+            <li>
+                <?php include("funtions/sideBarMenu.php") ?>
+            </li>
         </ul>
     </div>
 </body>
