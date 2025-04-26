@@ -123,7 +123,7 @@ $conn->close();
                             class="post-capa"
                             alt="Capa do post">
                     <?php endif; ?>
-                    
+
                     <!-- Seção de Vídeo (adicionar após a imagem de capa) -->
                     <?php if (!empty($post['video'])): ?>
                         <div class="video-container">
@@ -138,7 +138,7 @@ $conn->close();
                         <p class="post-description"><?= htmlspecialchars($post['descricao']) ?></p>
                     <?php endif; ?>
 
-                        <!--conteudo do post-->
+                    <!--conteudo do post-->
                     <div class="post-content"><?= nl2br(htmlspecialchars($post['conteudo'])) ?></div>
 
                     <?php if (!empty($post['imagens_adicionais'])): ?>
@@ -242,87 +242,10 @@ $conn->close();
             <div class="no-posts">
                 <p>Nenhum post encontrado. Seja o primeiro a compartilhar algo!</p>
             <?php endif; ?>
-
-            <script>
-                // Rolagem automática para o post após exclusão
-                document.addEventListener('DOMContentLoaded', function() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const postId = urlParams.get('post_id');
-
-                    if (postId) {
-                        const postElement = document.getElementById(`post-${postId}`);
-                        if (postElement) {
-                            postElement.scrollIntoView({
-                                behavior: 'smooth'
-                            });
-
-                            // Destacar o post
-                            postElement.style.transition = 'all 0.5s';
-                            postElement.style.boxShadow = '0 0 15px rgba(52, 152, 219, 0.5)';
-
-                            setTimeout(() => {
-                                postElement.style.boxShadow = 'none';
-                            }, 2000);
-                        }
-                    }
-                });
-            </script>
-            <!--ao comentar sera rolado ate onde comentou-->
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const urlParams = new URLSearchParams(window.location.search);
-
-                    // Scroll para comentários se houver parâmetro
-                    if (urlParams.has('comentario')) {
-                        const postId = urlParams.get('post_id');
-                        const comentarioStatus = document.getElementById('comentario-status');
-
-                        if (postId) {
-                            const targetSection = document.getElementById(`comentarios-post-${postId}`);
-                            if (targetSection) {
-                                setTimeout(() => {
-                                    targetSection.scrollIntoView({
-                                        behavior: 'smooth',
-                                        block: 'start'
-                                    });
-                                }, 500);
-                            }
-                        }
-
-                        // Remove a notificação após 5 segundos
-                        if (comentarioStatus) {
-                            setTimeout(() => {
-                                comentarioStatus.style.transform = 'translateX(150%)';
-                                setTimeout(() => comentarioStatus.remove(), 500);
-                            }, 5000);
-                        }
-                    }
-                });
-            </script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Seleciona todos os botões que controlam os comentários
-                    const btnToggleList = document.querySelectorAll('.btn-toggle');
-
-                    btnToggleList.forEach(function(btnToggle) {
-                        btnToggle.addEventListener('click', function() {
-                            // Obtém o ID do post a partir do atributo data-post
-                            const postId = btnToggle.getAttribute('data-post');
-                            // Seleciona o container de comentários correspondente
-                            const comentariosContainer = document.getElementById('comentarios-container-' + postId);
-
-                            // Alterna a exibição do container dos comentários
-                            if (comentariosContainer.style.display === "none" || comentariosContainer.style.display === "") {
-                                comentariosContainer.style.display = "block";
-                                btnToggle.textContent = "Ocultar comentários";
-                            } else {
-                                comentariosContainer.style.display = "none";
-                                btnToggle.textContent = "Mostrar comentários";
-                            }
-                        });
-                    });
-                });
-            </script>
+            <!--rolagem a excluir post-->
+            <script src="js/rolagemExcluirPost.js"></script>
+            <script src="js/rolagemComentar.js"></script>
+            <script src="js/mostrarComentario.js"></script>
             </div>
 </body>
 

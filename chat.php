@@ -88,7 +88,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
                     <?php endforeach; ?>
                 </div>
                 <form action="funtions/send_menssage.php" method="post" class="chat-form">
-                    <input type = "hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
+                    <input type="hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
                     <input type="text" name="msg" placeholder="Digite sua mensagem" required>
                     <button type="submit">Enviar</button>
                 </form>
@@ -109,7 +109,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
                     .then(data => {
                         const messagesContainer = document.querySelector('.chat-menssages');
                         messagesContainer.innerHTML = data.html; // Campo correto: 'html'
-                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        messagesContainer = messagesContainer.scrollHeight;
                     });
             }
 
