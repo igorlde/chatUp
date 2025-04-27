@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Corpo com fundo de linhas de caderno */
+body {
+  font-family: 'Patrick Hand', cursive, sans-serif;
+  background:
+    linear-gradient(transparent 0%, transparent 90%, #eae8df 90%),
+    linear-gradient(#fff 0%, #fff 100%);
+  background-size: 100% 2em;
+  background-color: #fff;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Barra de navegação fixa no topo */
+nav {
+  background: #fff;
+  padding: 1em 2em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav a .Butao-voltar {
+  background: #f4b400;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.3s;
+}
+
+nav a .Butao-voltar:hover {
+  background: #db9e00;
+}
+
+/* Container principal */
+.container {
+  width: 90%;
+  max-width: 800px;
+  margin: 2em auto;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 2em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
+}
+
+/* Títulos */
+h1,
+h2 {
+  margin-bottom: 1em;
+}
+
+/* Mensagens de status */
+.erro,
+.sucesso {
+  padding: 0.75em 1em;
+  margin-bottom: 1em;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.erro {
+  background: #fdecea;
+  color: #d93025;
+  border: 1px solid #f5c6cb;
+}
+
+.sucesso {
+  background: #e6f4ea;
+  color: #188038;
+  border: 1px solid #c3e6cb;
+}
+
+/* Editor de notas */
+.editor input[type="text"],
+.editor textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px dashed #aaa;
+  padding: 0.5em;
+  margin-bottom: 1em;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.editor input[type="text"]:focus,
+.editor textarea:focus {
+  outline: none;
+  border-bottom: 1px solid #f4b400;
+}
+
+.editor button[type="submit"] {
+  background: #0f9d58;
+  color: #fff;
+  border: none;
+  padding: 0.7em 1.5em;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: inherit;
+}
+
+.editor button[type="submit"]:hover {
+  background: #0b7a43;
+}
+
+/* Histórico de edições */
+.historico .registro {
+  margin-bottom: 1.5em;
+  padding-bottom: 1em;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.historico .registro h3 {
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+}
+
+.historico .registro small {
+  font-size: 0.8em;
+  color: #555;
+}
+
+.historico .registro .conteudo {
+  background: #fff;
+  padding: 1em;
+  border-radius: 3px;
+  border: 1px solid #eae8df;
+  margin-bottom: 0.5em;
+}
+
+.historico .registro .acoes a {
+  text-decoration: none;
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+.historico .registro .acoes a:hover {
+  text-decoration: underline;
+}
