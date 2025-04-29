@@ -12,6 +12,7 @@ $erro = '';
 $sucesso = '';
 $nota = [];
 
+
 // Carregar nota para edição
 if (isset($_GET['id'])) {
     try {
@@ -20,6 +21,26 @@ if (isset($_GET['id'])) {
         $nota = $resultado->fetch_assoc();
     } catch (Exception $e) {
         $erro = $e->getMessage();
+    }
+}
+
+// Verificar ação de exclusão
+if(isset($_GET['excluir'])){
+    try {
+        $id_excluir = (int)$_GET['excluir'];
+        $linhas = excluirBloco($id_excluir, $usuario_id, $conn);
+        
+        if($linhas > 0){
+            $sucesso = 'Nota excluída com sucesso!';
+                //limpar para evitar excluir alguma coisa sem querer. 
+            header("Location: blocoNotas.php");
+            exit;
+        } else {
+            $erro = 'Nenhuma nota encontrada para exclusão';
+        }
+        
+    } catch(Exception $e) {
+        $erro = "Erro: ".$e->getMessage();
     }
 }
 
@@ -116,8 +137,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <div class="acoes">
                             <a href="?id=<?= $registro['id'] ?>">Editar</a>
+                            <a href="?excluir=<?= $registro['id'] ?>" 
+                            onclick="return confirm('Tem certeza que deseja excluir esta nota?')">Excluir</a>
                         </div>
                     </div>
+                   
             <?php
                 endwhile;
             } catch (Exception $e) {

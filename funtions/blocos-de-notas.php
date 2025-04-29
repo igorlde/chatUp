@@ -1,5 +1,6 @@
 <?php 
 include("../connector_database/connector.php");
+
 //ainda em pensamento para desenvolver
 function inseridoNotas($usuario_id, $conn, $titulo, $conteudo){
     $sql = $conn->prepare("INSERT INTO bloco_de_notas (titulo, conteudo, usuario_id) VALUES (?,?, ?)");
@@ -33,6 +34,18 @@ function blocosEscritas($idBloco, $usuario_id, $conn){
     }
     else{
         throw new Exception("Erro ao tentar recuperar o bloco: ".$conn->error);
+    }
+}
+
+//função deletar blocos de notas.
+function excluirBloco($idbloco, $usuario_id, $conn){
+    $sql = $conn->prepare("DELETE FROM bloco_de_notas WHERE id = ? AND usuario_id = ?");
+    $sql->bind_param("ii", $idbloco, $usuario_id);
+    if($sql->execute()){
+        return $sql->affected_rows;
+    }
+    else{
+        throw new Exception("Erro ao tentar deletar seu bloco de notas: ".$conn->error);
     }
 }
 ?>
