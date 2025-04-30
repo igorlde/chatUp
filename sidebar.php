@@ -35,6 +35,7 @@ $stmtUser->close();
     <div class="sidebar">
         <!-- Cabeçalho do sidebar -->
         <div class="sidebar-header">
+        <h1 class="logo">ChatUp</h1>
             <a href="perfil.php"><img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto de Perfil" class="profile-pic"></a>
             <span><?= htmlspecialchars($userData['nome'] ?? 'Usuário') ?></span>
         </div>

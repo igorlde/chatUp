@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../connector_database/connector.php"); 
+include("../connector_database/connector.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isset($_POST['senha_login'])) {
     $email = $_POST['email_login'] ?? null;
@@ -13,14 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     }
 
     try {
-        // Verifica se a conexão está ativa
         if (!$conn || $conn->connect_error) {
             throw new Exception("Erro na conexão com o banco de dados");
         }
 
         $sql = $conn->prepare("SELECT id, nome_usuario, senha FROM users WHERE email = ?");
         $sql->bind_param("s", $email);
-        
+
         if (!$sql->execute()) {
             throw new Exception("Erro na execução da consulta");
         }
@@ -42,8 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             $_SESSION['erro'] = "Credenciais inválidas";
         }
 
-        $sql->close(); //fecha a conexão
-
+        $sql->close();
     } catch (Exception $e) {
         $_SESSION['erro'] = "Erro no servidor: " . $e->getMessage();
     } finally {
@@ -53,38 +51,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
 }
 ?>
 
-
 <!DOCTYPE html>
+
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login | ChatUp</title>
     <link rel="stylesheet" href="../style/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <?php if (isset($_SESSION['erro'])): ?>
-        <div class="erro"><?= $_SESSION['erro'] ?></div>
-        <?php unset($_SESSION['erro']); ?>
-    <?php endif; ?>
+    <div class="container-login">
+        <div class="sidebar">
+            <h1 class="logo-text">ChatUp</h1>
+            <div class="frases">
+                <span class="frase ativa">Publique fotos e vídeos</span>
+                <span class="frase">Troque mensagens com seus amigos</span>
+                <span class="frase">Divirta-se no ChatUp</span>
+            </div>
+        </div>
 
-    <form action="login.php" method="post">
-        <div>
-            <label for="email_login">Email</label>
-            <input type="email" name="email_login" id="email_login" required>
-        </div>
-        <div>
-            <label for="senha_login">Senha</label>
-            <input type="password" name="senha_login" id="senha_login" required>
-        </div>
-        <div>
-            <input type="submit" value="Login">
-        </div>
-    </form>
+        <div class="form-area">
+            <?php if (isset($_SESSION['erro'])): ?>
+                <div class="erro"><?= $_SESSION['erro'] ?></div>
+                <?php unset($_SESSION['erro']); ?>
+            <?php endif; ?>
 
-    <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
+            <form action="login.php" method="post">
+                <div>
+                    <label for="email_login">Email</label>
+                    <input type="email" name="email_login" id="email_login" required>
+                </div>
+                <div>
+                    <label for="senha_login">Senha</label>
+                    <input type="password" name="senha_login" id="senha_login" required>
+                </div>
+                <div>
+                    <input type="submit" value="Entrar">
+                </div>
+            </form>
+
+            <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
+        </div>
+    </div>
+
+    <script>
+        const frases = document.querySelectorAll(".frase");
+        let index = 0;
+
+        setInterval(() => {
+            frases.forEach(f => f.classList.remove("ativa"));
+            index = (index + 1) % frases.length;
+            frases[index].classList.add("ativa");
+        }, 3000);
+    </script>
 </body>
 
 </html>

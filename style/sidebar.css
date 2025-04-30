@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+.logo {
+  font-family: 'Poppins', sans-serif;
+  font-size: 32px;
+  font-weight: 600;
+  color: #3B82F6; /* tom de azul moderno */
+  margin-top: 30px;
+  text-align: center;
+}
+
 /* Define largura fixa e altura total */
 .sidebar {
     position: fixed;
