@@ -131,9 +131,10 @@
      // Fechar a conexão após a execução do código
      $conn->close();
          // Redirecionamento com sucesso
-         $_SESSION['sucesso'] = "Cadastro realizado!";
-         header("Location: login.php");
-         exit;
+         $_SESSION['sucesso'] = "Cadastro realizado com sucesso! Faça login para continuar.";
+        header("Location: login.php");
+        exit;
+
  
      } catch (mysqli_sql_exception $e) {
          // Rollback e tratamento de erro
@@ -181,6 +182,10 @@
     </style>
 </head>
 <body>
+<div class="logo-container">
+  <h1>ChatUp</h1>
+</div>
+
     <h1 class = "h1-cadastro">Cadastro de Usuário</h1>
 
     <?php
@@ -233,7 +238,7 @@
             <input type="date" id="data_nascimento" name="data_nascimento" required>
         </div>
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit" class="btn-cadastrar" >Cadastrar</button>
     </form>
 </body>
 </html>

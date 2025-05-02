@@ -1,102 +1,154 @@
 
-/* Reset básico */
-* {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+
+/* Fundo geral */
+body {
+    background-color: #F9FAFB;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #111827;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* Estilização geral do body */
-body {
-    background-color: #f5f5f5;
-    font-family: 'Arial', sans-serif;
-    color: #333;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* Título principal */
-.h1-cadastro {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #333;
+  }
+  
+  /* Logo */
+  .logo-container {
     text-align: center;
-}
+    margin-top: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .logo-container h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 36px;
+    color: #3B82F6; /* Azul principal */
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 0;
+  }
 
-/* Caixa do formulário */
-form {
-    background-color: #fff;
-    padding: 20px 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+  .h1-cadastro {
+    text-align: center;
+  }
+  
+  /* Formulário */
+  form {
+    max-width: 400px;
+    background-color: #FFFFFF; /* Fundo branco */
+    padding: 30px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #E5E7EB; /* Borda/sombra cinza claro */
+    border: 1px solid #E5E7EB;
+  }
+  
+  /* Título do formulário */
+  form h2 {
+    text-align: center;
+    color: #111827; /* Texto escuro */
+    margin-bottom: 20px;
+  }
+  
+  /* Inputs */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     width: 100%;
-}
-
-/* Agrupamento de cada campo de formulário */
-.form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Rótulo dos campos */
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-/* Entradas de dados */
-.form-group input {
-    padding: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: rgba(52, 152, 219, 0.2);
-}
-
-/* Botão de envio */
-button {
-    background-color: rgba(52, 152, 219, 0.2);
-    border: none;
     padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    color: #111827;
+    background-color: #FFFFFF;
+  }
+  
+  /* Placeholder (se quiser estilizar) */
+  input::placeholder {
+    color: #6B7280; /* Texto secundário */
+  }
+  
+  /* Botão */
+  input[type="submit"] {
     width: 100%;
-    color: #333;
-    font-size: 1.1rem;
+    padding: 12px;
+    background-color: #3B82F6; /* Azul principal */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
     font-weight: bold;
-    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
     margin-top: 10px;
-}
-
-button:hover {
-    background-color: rgba(52, 152, 219, 0.5);
-    color: #fff;
-}
-
+    transition: background-color 0.3s ease;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #2563EB; /* Azul escuro (hover) */
+  }
+  
+  /* Link abaixo do formulário (ex: login) */
+  a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #3B82F6; /* Azul principal */
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .btn-cadastrar {
+    background-color: #3B82F6; /* Azul principal */
+    color: #FFFFFF;            /* Texto branco */
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1); /* leve sombra azul */
+  }
+  
+  .btn-cadastrar:hover {
+    background-color: #2563EB; /* Azul escuro (hover) */
+    transform: scale(1.02);
+  }
+  
 /* Mensagens de erro e sucesso */
-.error, .success {
-    background-color: rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
+/* Estilo para mensagens de erro */
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
 }
 
 .error p {
-    color: #c0392b;
+    margin: 0;
+}
+
+/* Estilo para mensagens de sucesso */
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
 }
 
 .success p {
-    color: #27ae60;
+    margin: 0;
 }
