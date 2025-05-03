@@ -3,59 +3,9 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include("connector_database/connector.php");
-
-// Verifica conexão
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
-
-// Verifica login
-if (!isset($_SESSION["usuario_id"])) {
-    header("Location: login.php");
-    exit;
-}
-
-$currentUserId = $_SESSION["usuario_id"];
-$searchResults = [];
-
-// Verifica envio do formulário
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['User_name'])) {
-    $searchTerm = '%' . trim($_POST['User_name']) . '%';
-
-    // Query corrigida
-    $sql = "SELECT 
-                u.id, 
-                u.nome, 
-                u.avatar,
-                EXISTS(
-                    SELECT 1 
-                    FROM seguidores 
-                    WHERE seguidor_id = ? 
-                    AND seguido_id = u.id
-                ) AS seguindo
-            FROM users u
-            WHERE u.nome LIKE ? 
-            OR u.nome_usuario LIKE ? 
-            ORDER BY u.nome ASC";
-
-    $stmt = $conn->prepare($sql);
-    if (!$stmt) {
-        die("Erro na preparação: " . $conn->error);
-    }
-
-    $stmt->bind_param("iss", $currentUserId, $searchTerm, $searchTerm);
-
-    if (!$stmt->execute()) {
-        die("Erro na execução: " . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    $searchResults = $result->fetch_all(MYSQLI_ASSOC);
-
-    // Fecha resultados
-    $result->close();
-    $stmt->close();
-}
+include("funcoes/busca-user.php");
+validar_usuario();
+$searchResults = processar_busca($conn);
 
 $conn->close();
 ?>
