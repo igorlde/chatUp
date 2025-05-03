@@ -12,7 +12,7 @@ function validar_usuario(): void
 }
 /**
  * Função de veficar de deslike
- * @param sql conn,
+ * @param mysqli conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -28,7 +28,7 @@ function verificar_deslike_existente(mysqli $conn, int $usuario_id, int $post_id
 }
 /**
  * Função de remover curtidas existente.
- * @param sql conn,
+ * @param mysqli conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -44,7 +44,7 @@ function remover_curtida_existente(mysqli $conn, int $usuario_id, int $post_id):
 
 /**
  * Função de da deslike
- * @param sql conn,
+ * @param mysqli conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -59,7 +59,7 @@ function registrar_descurtida(mysqli $conn, int $usuario_id, int $post_id): void
 }
 /**
  * Função processar seus deslikes.
- * @param sql $conn.
+ * @param mysqli $conn.
  */
 function processar_descurtida(mysqli $conn): void
 {
@@ -87,7 +87,7 @@ function processar_descurtida(mysqli $conn): void
 /**
  * Função auxiliar
  * 
- * @param sql conn,
+ * @param mysqli conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */

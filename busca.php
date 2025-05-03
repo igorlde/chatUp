@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include("connector_database/connector.php");
-include("funtions/busca-user.php");
+include("funcoes/busca-user.php");
 validar_usuario();
 $searchResults = processar_busca($conn);
 

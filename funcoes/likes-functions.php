@@ -14,7 +14,7 @@ function validar_usuario(): void
 }
 /**
  * Função verficar post onde sera curtido.
- * @param sql $conn,
+ * @param mysqli $conn,
  * @param int $post_id.
  */
 function verificar_post(mysqli $conn, int $post_id): void
@@ -32,7 +32,7 @@ function verificar_post(mysqli $conn, int $post_id): void
 }
 /**
  * Função verficar se usuario ja curtiu o post
- * @param sql $conn,
+ * @param mysqli $conn,
  * @param int $usuario_id,
  * @param int $post_id
  */
@@ -45,7 +45,7 @@ function curtida_existe(mysqli $conn, int $usuario_id, int $post_id): bool
 }
 /**
  * Função verficar se usuario ja deu deslike naquele post.
- * @param sql $conn,
+ * @param mysqli $conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -58,7 +58,7 @@ function descurtida_existe(mysqli $conn, int $usuario_id, int $post_id): bool
 }
 /**
  * Função remover deslike dentro do banco.
- * @param sql $conn,
+ * @param mysqli $conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -73,7 +73,7 @@ function remover_descurtida(mysqli $conn, int $usuario_id, int $post_id): void
 }
 /**
  * Função registrar curtidas no banco de dados.
- * @param sql $conn,
+ * @param mysqli $conn,
  * @param int $usuario_id,
  * @param int $post_id.
  */
@@ -103,7 +103,7 @@ function registrar_curtida(mysqli $conn, int $usuario_id, int $post_id): void
 }
 /**
  * Função processamneto final
- * @param sql $conn.
+ * @param mysqli $conn.
  */
 function processar_curtida(mysqli $conn): void {
     validar_usuario();
