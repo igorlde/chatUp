@@ -3,56 +3,15 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include("connector_database/connector.php");
+include(__DIR__ . '/funtions/busca-p.php');
 
-// Verifica conexão
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
+validar_autenticacao();
 
-// Verifica login
-if (!isset($_SESSION["usuario_id"])) {
-    header("Location: login.php");
-    exit;
-}
-$posts = [];
-//verificar envio do busca post
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["Title_post"])) {
-    try {
-        $searchTerm = trim($_POST['Title_post']);
-        $executeBind = "%$searchTerm%";//criando a variavel para receber o parametro para o bind_param.
+// Processar busca e obter posts
+$posts = processar_busca($conn);
 
-        $sql = "SELECT 
-        p.*,
-        u.nome AS autor,
-        GROUP_CONCAT(DISTINCT t.nome_tag) AS tags,
-        GROUP_CONCAT(DISTINCT pi.caminho_arquivo) AS imagens_adicionais
-    FROM posts p
-    INNER JOIN users u ON p.usuario_id = u.id
-    LEFT JOIN post_tags pt ON p.id = pt.post_id
-    LEFT JOIN tags t ON pt.tag_id = t.id
-    LEFT JOIN post_imagens pi ON p.id = pi.post_id
-    WHERE p.titulo LIKE ?
-    GROUP BY p.id
-    ORDER BY p.data_publicacao DESC
-    LIMIT 10";
-
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            die("erro ao tentar executar comando sql " . $conn->error);
-        }
-        $stmt->bind_param("s", $executeBind);//bind_param em execução
-        $stmt->execute();
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $row['tags'] = $row['tags'] ? explode(',', $row['tags']) : [];
-            $row['imagens_adicionais'] = $row['imagens_adicionais'] ? explode(',', $row['imagens_adicionais']) : [];
-            $posts[] = $row;
-        }
-    } catch (Exception $e) {
-        $e->getMessage();
-    }
-    $conn->close();
-}
+// Fechar conexão apenas no final
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
