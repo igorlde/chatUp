@@ -5,14 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurações</title>
+    <link rel="stylesheet" href="style/sidebar.css">
 </head>
 
 <body>
     <!--criar metodo de butao para ver lista de conf-->
     <div>
-        <a href="editar-perfil.php"><button type="submit">Edita perfil</button></a>
-        <a href="menus/blocoNotas.php"><button type="submit">Bloco de notas</button></a>
-        <a href="#"><button type="submit"></button></a>
+        <a href="menus/blocoNotas.php"><button type="submit"  class="botao-menu">Bloco de notas</button></a>
 
     </div>
 

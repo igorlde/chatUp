@@ -82,6 +82,9 @@ if (!$perfilUser) {
 <div class="perfil-header">
     <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">
     <h1><?= htmlspecialchars($perfilUser['nome']) ?></h1>
+
+    <a href="editar-perfil.php"><button type="submit" class="botao-editar">Editar perfil</button></a>
+    
     <!--Erro resolvido simplemente era o value que estava com o nome errado ai não passava informação para o seguir.php. principalmente na variavel $acao kkk-->
     <?php if ($perfilUser['id'] != $currentUserId): ?>
         <form method="POST" action="seguir.php">

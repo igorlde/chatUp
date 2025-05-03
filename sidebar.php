@@ -27,7 +27,7 @@ $stmtUser->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web_principal_chatUp</title>
+    <title>Home - ChatUp</title>
     <link rel="stylesheet" href="style/sidebar.css">
 </head>
 
@@ -37,31 +37,31 @@ $stmtUser->close();
         <div class="sidebar-header">
         <h1 class="logo">ChatUp</h1>
             <a href="perfil.php"><img src="uploads/avatars/<?= htmlspecialchars($avatar) ?>" alt="Foto de Perfil" class="profile-pic"></a>
-            <span><?= htmlspecialchars($userData['nome'] ?? 'Usuário') ?></span>
+            <span class="nomeusuario"><?= htmlspecialchars($userData['nome'] ?? 'Usuário') ?></span>
         </div>
 
         <!-- Menu do sidebar -->
         <ul class="sidebar-menu">
-            <li><a href="post.php">＋ Criar Novo Post</a></li>
+            <li class="botao-criarpost"><a href="post.php">＋ Criar Novo Post</a></li>
 
             <!-- Formulário de busca de usuários -->
             <li>
                 <form method="POST" action="busca.php">
-                    <input type="text" name="User_name" placeholder="Buscar usuários...">
-                    <button type="submit">🔎</button>
+                    <input type="text" name="User_name" class="buscar" placeholder="Buscar usuários...">
+                    <button type="submit" class="pesquisa">🔎</button>
                 </form>
             </li>
             <li>
                 <form method="POST" action="busca-post.php">
-                    <input type="text" name="Title_post" placeholder="Buscar Post">
-                    <button type="submit">🔎</button>
+                    <input type="text" name="Title_post" class="buscar" placeholder="Buscar Post">
+                    <button type="submit" class="pesquisa">🔎</button>
                 </form>
             </li>
 
             <!-- Link para conversar -->
             <li>
                 <form action="chat.php" method="get">
-                    <button type="submit">💬 Bate-papo</button>
+                    <button type="submit"  class="botao-menu">💬 Bate-papo</button>
                 </form>
             </li>
             <li>
