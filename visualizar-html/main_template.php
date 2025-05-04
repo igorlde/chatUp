@@ -9,9 +9,7 @@
 </head>
 
 <body>
-    <?php include 'sidebar.php'; ?>
-    <!-- codigo valiosos-->
-    <!--<pre><//?=// print_r($posts, true) ?></pre>-->
+    <?php include 'sidebar/newsidebar.php'; ?>
     <div class="aba-post">
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>
@@ -73,14 +71,14 @@
                     <?php endif; ?>
 
                     <!--logica das curtidas dentro do main.php -->
-                    <form action="funtions/likes-functions.php" method="post">
+                    <form action="funcoes/likes-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-curtir">
                             👍 <?= $post['curtidas'] ?? 0 ?>
                         </button>
                     </form>
                     <!--logica de deslike-->
-                    <form action="funtions/deslike-functions.php" method="post">
+                    <form action="funcoes/deslike-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
                     </form>

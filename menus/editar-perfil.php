@@ -1,7 +1,7 @@
 <?php
 session_start();
-include "connector_database/connector.php";
-require __DIR__ . "/funcoes/editar-usuario.php";
+include "../connector_database/connector.php";
+require __DIR__ . "/../funcoes/editar-usuario.php";
 try {
     validar_autenticacao();
     $usuario_id = $_SESSION['usuario_id'];
@@ -36,5 +36,5 @@ $stmt->execute();
 $usuario = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 $conn->close();
-include __DIR__ .'/visualizar-html/visualizar-perfil.php';
+include __DIR__ .'/../visualizar-html/visualizar-perfil.php';
 ?>

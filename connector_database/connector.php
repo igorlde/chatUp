@@ -1,14 +1,4 @@
 <?php
-<<<<<<< HEAD
-$localhost = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "banco_chatUp";
-$porta = 3306;
-=======
->>>>>>> a3babde2d08131c9c9a17399f42af43e194e2352
-
-
     $localhost = "127.0.0.1";
     $usuario = "root";
     $senha = "G!9fLx@82_Tz%kR";

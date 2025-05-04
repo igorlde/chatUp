@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("../connector_database/connector.php");
+require_once __DIR__ . '/../connector_database/connector.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isset($_POST['senha_login'])) {
     $email = $_POST['email_login'] ?? null;
@@ -59,6 +59,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ChatUp</title>
+    <!--esse daqui e de quando inicia-->
+    <link rel="stylesheet" href="style/login.css">
+    <!-- não estranha tive que fazer essa duplicação pois não estava funcionado quando clico em sair, o css-->
     <link rel="stylesheet" href="../style/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
@@ -80,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form action="login.php" method="post">
+            <form action="login/login.php" method="post">
                 <div>
                     <label for="email_login">Email</label>
                     <input type="email" name="email_login" id="email_login" required>

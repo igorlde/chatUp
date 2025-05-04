@@ -1,7 +1,7 @@
 <?php
 session_start();
 include("../connector_database/connector.php");
-include("../funtions/blocos-de-notas.php");
+include("../funcoes/blocos-de-notas.php");
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;

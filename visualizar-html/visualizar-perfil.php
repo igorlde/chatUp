@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Editar Perfil</title>
-    <link rel="stylesheet" href="style/editar-perfil.css">
+    <link rel="stylesheet" href="../style/editar-perfil.css">
 </head>
 <body>
     <header>
-        <a href="main.php">Voltar</a>
+        <a href="../main.php">Voltar</a>
     </header>
     <h1>Editar Perfil</h1>
     
@@ -22,7 +22,7 @@
     <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label>Foto do Perfil:</label><br>
-            <img src="uploads/avatars/<?= htmlspecialchars($usuario['avatar'] ?? 'default.png') ?>" 
+            <img src="../uploads/avatars/<?= htmlspecialchars($usuario['avatar'] ?? 'default.jpg') ?>" 
                  class="avatar-preview"
                  alt="Preview do avatar">
             <input type="file" name="avatar" accept="image/*">
