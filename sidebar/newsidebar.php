@@ -103,7 +103,7 @@ try {
         <div id="logout">
             <button id="logout-btn">
                 <i class="fa-solid fa-right-from-bracket"></i>
-                <a href="login/login.php"><span class="item-description">
+                <a href="index.php"><span class="item-description">
                         Sair
                     </span></a>
             </button>
