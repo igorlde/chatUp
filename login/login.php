@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
 
-            <form action="login/login.php" method="post">
+            <form action="/projeto_ed_feito/login/login.php" method="post">
                 <div>
                     <label for="email_login">Email</label>
                     <input type="email" name="email_login" id="email_login" required>
