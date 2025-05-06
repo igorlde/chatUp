@@ -184,6 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+
     <div class="post-creator">
         <?php if (!empty($_SESSION['erros_post'])): ?>
             <div class="alert-error">

@@ -9,7 +9,12 @@
 </head>
 
 <body>
-    <?php include 'sidebar/newsidebar.php'; ?>
+    <header>
+        <nav><h1 id="logo">ChatUp</h1></nav>
+</header>
+    
+<?php include("sidebar/newsidebar.php"); ?>
+
     <div class="aba-post">
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>

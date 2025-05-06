@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
 
     if (!$email || !$senha) {
         $_SESSION['erro'] = "Preencha todos os campos";
-        header("Location: /projeto_ed_feito/login/login.php");
+        header("Location: /chatUp/login/login.php");
         exit;
     }
 
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
             if (password_verify($senha, $row["senha"])) {
                 $_SESSION["usuario_id"] = $row["id"];
                 $_SESSION["nome_usuario"] = $row["nome_usuario"];
-                header("Location: /projeto_ed_feito/main.php");
+                header("Location: /chatUp/main.php");
                 exit;
             } else {
                 $_SESSION['erro'] = "Credenciais inválidas";
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
             
-            <form action="/projeto_ed_feito/login/login.php" method="post">
+            <form action="/chatUp/login/login.php" method="post">
                 <div>
                     <label for="email_login">Email</label>
                     <input type="email" name="email_login" id="email_login" required>

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
 
 /* Estilos Gerais */
 body {
@@ -7,6 +8,7 @@ body {
     padding: 0;
     color: #262626;
 }
+
 
 .aba-post {
     max-width: 600px;

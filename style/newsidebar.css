@@ -16,7 +16,6 @@ body {
 
 main {
     padding: 20px;
-    position: fixed;
     z-index: 1;
     padding-left: calc(82px + 20px);
 }
@@ -28,7 +27,7 @@ main {
     background-color: #ffffff;
     height: 100vh;
     border-radius: 0px 18px 18px 0px;
-    position: relative;
+    position: fixed;
     transition: all .5s;
     min-width: 82px;
     z-index: 2;
@@ -50,6 +49,7 @@ main {
     height: 50px;
     object-fit: cover;
     border-radius: 100%;
+    border: 3px solid #3498db;
 }
 
 #user-infos {
@@ -60,6 +60,15 @@ main {
 #user-infos span:last-child {
     color: #6b6b6b;
     font-size: 12px;
+}
+
+#editar {
+    text-decoration: none;
+    border-radius: 11px;
+    padding: 8px;
+    cursor: pointer;
+    color: white;
+    background-color: #808080;
 }
 
 #side-items {
@@ -76,7 +85,7 @@ main {
 }
 
 .side-item.active {
-    background-color: #4f46e5;
+    background-color: #3498db;
 }
 
 .side-item:hover:not(.active), 
@@ -127,7 +136,7 @@ main {
     position: absolute;
     top: 30px;
     right: -10px;
-    background-color: #4f46e5;
+    background-color: #3498db;
     color: #e3e9f7;
     border-radius: 100%;
     width: 20px;
@@ -233,7 +242,7 @@ main {
         transform: rotate(-90deg);
         align-items: center;
         justify-content: center;
-        background-color: #4f46e5;
+        background-color: #3498db;
         color: #fff;
         width: 30px;
         height: 30px;
