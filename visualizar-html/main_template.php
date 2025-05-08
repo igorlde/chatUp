@@ -9,8 +9,10 @@
 </head>
 
 <body>
-    <header>
-        <nav><h1 id="logo">ChatUp</h1></nav>
+<header>
+    <nav>
+        <h1 id="logo">ChatUp</h1>
+    </nav>
 </header>
     
 <?php include("sidebar/newsidebar.php"); ?>
@@ -76,18 +78,19 @@
                     <?php endif; ?>
 
                     <!--logica das curtidas dentro do main.php -->
-                    <form action="funcoes/likes-functions.php" method="post">
-                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                        <button type="submit" class="btn-curtir">
-                            👍 <?= $post['curtidas'] ?? 0 ?>
-                        </button>
-                    </form>
+                    <div class="botoes-reacoes">
+    <form action="funcoes/likes-functions.php" method="post">
+        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+        <button type="submit" class="btn-curtir">
+            👍 <?= $post['curtidas'] ?? 0 ?>
+        </button>
+    </form>
                     <!--logica de deslike-->
                     <form action="funcoes/deslike-functions.php" method="post">
-                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                        <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
-                    </form>
-
+        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+        <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
+    </form>
+</div>
 
                     <!--mostrar comentarios-->
                     <button type="button" class="btn-toggle" data-post="<?= $post['id'] ?>">Mostrar comentários</button>

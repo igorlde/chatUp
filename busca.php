@@ -29,6 +29,9 @@ try {
     <link rel="stylesheet" href="style/busca.css">
 </head>
 <body>
+<div class="sidebar">
+    <?php include("sidebar/newsidebar.php"); ?>
+  </div>
   <nav>
     <?php include("sidebar/side-busca.php") ?>
   </nav>

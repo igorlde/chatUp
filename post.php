@@ -184,6 +184,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+<div class="layout">
+  <div class="sidebar">
+    <?php include("sidebar/newsidebar.php"); ?>
+  </div>
+
+  <div class="main-content">
 
     <div class="post-creator">
         <?php if (!empty($_SESSION['erros_post'])): ?>
@@ -258,6 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <button type="submit" class="btn-primary">Publicar Post</button>
         </form>
+    </div>
     </div>
 
     <script>

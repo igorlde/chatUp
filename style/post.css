@@ -7,23 +7,39 @@
     box-sizing: border-box;
 }
 
-/* Configurações globais do body */
+/* Body sem flex */
 body {
     background-color: #f9f9f9;
     font-family: 'Arial', sans-serif;
     color: #333;
     line-height: 1.6;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Layout principal com sidebar e conteúdo */
+.layout {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    min-height: 100vh;
+}
+
+
+/* Conteúdo principal */
+.main-content {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        padding: 40px;
+    
 }
 
 /* Container do post */
 .post-creator {
     background-color: #fff;
     padding: 30px;
-    width: 90%;
+    width: 100%;
     max-width: 800px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -64,14 +80,14 @@ body {
     font-weight: bold;
 }
 
-/* Notas explicativas (ex.: formatos e tamanhos) */
+/* Notas explicativas */
 .form-note {
     font-size: 0.8rem;
     color: #666;
     margin-top: 5px;
 }
 
-/* Entradas de dados e textarea */
+/* Campos de entrada */
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="file"],
@@ -92,7 +108,7 @@ body {
     border-color: rgba(52, 152, 219, 0.2);
 }
 
-/* Estilização para textarea */
+/* Textarea */
 textarea {
     min-height: 120px;
     resize: vertical;
@@ -139,7 +155,7 @@ textarea {
     cursor: pointer;
 }
 
-/* Botão de envio */
+/* Botão */
 button.btn-primary {
     background-color: rgba(52, 152, 219, 0.2);
     border: none;
@@ -159,3 +175,61 @@ button.btn-primary:hover {
     color: #fff;
 }
 
+/* Responsividade */
+@media (max-width: 1024px) {
+    .main-content {
+        padding: 20px;
+    }
+    
+    .post-creator {
+        padding: 20px;
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    .layout {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .post-creator {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .post-creator {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .post-creator h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 0.85rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}

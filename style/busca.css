@@ -1,94 +1,124 @@
-.container {
-    max-width: 800px;
-    margin: 20px auto;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
+/* Resetando margens e padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #e3e9f7;
+}
+
+main.container {
+    flex: 1;
     padding: 20px;
+    padding-left: calc(82px + 20px); /* Alinhamento com a sidebar */
+}
+
+h1 {
+    font-size: 24px;
+    color: #3498db;
+    margin-bottom: 20px;
 }
 
 .user-list {
-    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .user-card {
-    display: flex;
+    background-color: #ffffff;
     padding: 15px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: calc(33% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.user-card:hover {
+    transform: scale(1.05);
 }
 
 .profile-pic-small {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
     border-radius: 50%;
-    margin-right: 20px;
+    border: 3px solid #3498db;
+    margin-bottom: 10px;
+}
+
+.user-info h3 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.badge-seguindo {
+    background-color: #3498db;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
 }
 
 .action-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    margin-top: auto;
 }
 
-.btn-visualizar {
-    padding: 8px 15px;
-    background: #3498db;
+.action-buttons a.btn-visualizar {
+    display: block;
+    background-color: #3498db;
     color: white;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
     text-decoration: none;
+    font-size: 14px;
+    width: 100%;
 }
 
-.btn-follow {
-    background: #2ecc71;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-}
-
-.btn-unfollow {
-    background: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 15px;
+.action-buttons a.btn-visualizar:hover {
+    background-color: #2980b9;
 }
 
 .no-results {
     text-align: center;
-    padding: 40px;
-    color: #666;
+    color: #888;
+    font-size: 16px;
 }
 
-.debug-info {
-    color: #999;
-    font-size: 0.9em;
-    margin-top: 10px;
+.no-results p {
+    margin-top: 20px;
 }
 
-.btn-follow, .btn-unfollow {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    margin-left: 10px;
-}
 
-.btn-follow {
-    background-color: #28a745;
-    color: white;
-}
 
-.btn-follow:hover {
-    background-color: #218838;
-}
 
-.btn-unfollow {
-    background-color: #dc3545;
-    color: white;
-}
 
-.btn-unfollow:hover {
-    background-color: #c82333;
-}
+@media (max-width: 768px) {
+    main.container {
+        padding-left: 82px; /* Para garantir o alinhamento com a sidebar */
+    }
 
-.follow-form {
-    display: inline-block;
+    .user-card {
+        width: calc(50% - 20px); /* Ajuste para telas menores */
+    }
+
+    .user-list {
+        justify-content: center;
+    }
+
+    .action-buttons a.btn-visualizar {
+        width: 100%;
+    }
 }

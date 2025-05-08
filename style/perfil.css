@@ -7,7 +7,7 @@ body {
 }
 
 main {
-    margin-left: 100px; /* se o sidebar expandido for maior, ajuste aqui */
+    margin-left: 0px; /* se o sidebar expandido for maior, ajuste aqui */
     padding: 30px;
     min-height: 100vh;
 }
