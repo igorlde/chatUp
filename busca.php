@@ -33,9 +33,14 @@ try {
 <body>
     <nav>
         <?php include("sidebar/side-busca.php") ?>
-        <?php //aqui e seu sideBar deixa para tirar os comentarios quando estilizar tudo.
-        //require __DIR__ . '/sidebar/newsidebar.php' ?>
     </nav>
+
+<div class="sidebar">
+    <?php include("sidebar/newsidebar.php"); ?>
+  </div>
+  <nav>
+    <?php include("sidebar/side-busca.php") ?>
+  </nav>
 
     <main class="container">
         <h1>Resultados para "<?= htmlspecialchars($_POST['User_name'] ?? '') ?>"</h1>

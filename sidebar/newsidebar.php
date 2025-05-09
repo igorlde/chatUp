@@ -33,8 +33,9 @@ try {
 <body>
     <nav id="sidebar">
         <div id="sidebar-content">
+           
             <div id="user">
-                <a href="menus/editar-perfil.php"><img src="uploads/avatars/<?=htmlspecialchars($user['avatar'])?>" id="user-avatar" alt="Avatar"></a>
+                <a href="perfil.php"><img src="uploads/avatars/<?=htmlspecialchars($user['avatar'])?>" id="user-avatar" alt="Avatar"></a>
                 <p id="user-infos">
                     <span class="item-description">
                         <?php echo htmlspecialchars($user['nome']); ?>
@@ -42,6 +43,12 @@ try {
                     <span class="item-description">
                         <?php echo htmlspecialchars($user['bio']); ?>
                     </span>
+
+                    <span class="item-description">
+                        <a href="menus/editar-perfil.php" id="editar">Editar Perfil</a>
+                    </span>
+                    
+    </form>
                 </p>
             </div>
 
@@ -55,6 +62,16 @@ try {
                         </span>
                     </a>
                 </li>
+
+                <li class="side-item">
+                <a href="main.php">
+                <i class="fa-solid fa-house"></i>
+                <span class="item-description">
+                    Início
+                </span>
+                </a>
+            </li>
+
                 <li class="side-item">
                 <a href="busca.php">
                 <i class="fa-solid fa-users"></i>
@@ -102,8 +119,9 @@ try {
 
         <div id="logout">
             <button id="logout-btn">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <a href="index.php"><span class="item-description">
+            <a href="index.php">
+            <i class="fa-solid fa-right-from-bracket"></i>
+                <span class="item-description">
                         Sair
                     </span></a>
             </button>

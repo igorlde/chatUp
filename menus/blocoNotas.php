@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <nav>
-        <a href="../main.php"><button type="submit" class="Butao-voltar">Volta</button></a>
+        <a href="../main.php"><button type="submit" class="Butao-voltar">Voltar</button></a>
     </nav>
     <div class="container">
         <h1>Meu Bloco de Notas</h1>

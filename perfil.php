@@ -77,8 +77,15 @@ if (!$perfilUser) {
     <title>Document</title>
     <link rel="stylesheet" href="style/perfil.css">
 </head>
-<a href="main.php">voltar</a>
+
+<?php include("sidebar/newsidebar.php"); ?>
+
 <!-- Conteúdo do perfil -->
+
+<main>
+
+<h1 id="logo">ChatUp</h1>
+
 <div class="perfil-header">
     <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">
     <h1><?= htmlspecialchars($perfilUser['nome']) ?></h1>
@@ -98,19 +105,22 @@ if (!$perfilUser) {
     <?php endif; ?>
     <form action="seguidores/pagina_seguidores.php" method="get" class="botao-container">
         <button type="submit" class="botao-primario">
-            👥 Seguidores
+            Seguidores
         </button>
     </form>
 
     <form action="seguidores/pagina_seguido.php" method="get" class="botao-container">
         <button type="submit" class="botao-secundario">
-            🔍 Seguindo
+            Seguindo
         </button>
     </form>
+
 </div>
 <div class="conteudo-dos-usuario">
+    <h2>Posts</h2>
             <?php include("funcoes/fuction-postPerfil.php");?>
 </div>
+</main>
 </body>
 
 </html>

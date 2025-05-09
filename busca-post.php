@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include("connector_database/connector.php");
 include(__DIR__ . '/funcoes/busca-p.php');
+include("sidebar/newsidebar.php");
 
 validar_autenticacao();
 
