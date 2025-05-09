@@ -1,54 +1,8 @@
 <?php
 session_start();
 require_once __DIR__ . '/../connector_database/connector.php';
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isset($_POST['senha_login'])) {
-    $email = $_POST['email_login'] ?? null;
-    $senha = $_POST['senha_login'] ?? null;
-
-    if (!$email || !$senha) {
-        $_SESSION['erro'] = "Preencha todos os campos";
-        header("Location: /projeto_ed_feito/login/login.php");
-        exit;
-    }
-
-    try {
-        if (!$conn || $conn->connect_error) {
-            throw new Exception("Erro na conexão com o banco de dados");
-        }
-
-        $sql = $conn->prepare("SELECT id, nome_usuario, senha FROM users WHERE email = ?");
-        $sql->bind_param("s", $email);
-
-        if (!$sql->execute()) {
-            throw new Exception("Erro na execução da consulta");
-        }
-
-        $result = $sql->get_result();
-
-        if ($result->num_rows === 1) {
-            $row = $result->fetch_assoc();
-
-            if (password_verify($senha, $row["senha"])) {
-                $_SESSION["usuario_id"] = $row["id"];
-                $_SESSION["nome_usuario"] = $row["nome_usuario"];
-                header("Location: /projeto_ed_feito/main.php");
-                exit;
-            } else {
-                $_SESSION['erro'] = "Credenciais inválidas";
-            }
-        } else {
-            $_SESSION['erro'] = "Credenciais inválidas";
-        }
-
-        $sql->close();
-    } catch (Exception $e) {
-        $_SESSION['erro'] = "Erro no servidor: " . $e->getMessage();
-    } finally {
-        header("Location: login.php");
-        exit;
-    }
-}
+require_once __DIR__ . '/../funcoes/Funcao_login.php';
+processar_login($conn);
 ?>
 
 <!DOCTYPE html>
@@ -60,9 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ChatUp</title>
     <!--esse daqui e de quando inicia-->
-    <link rel="stylesheet" href="style/login.css">
-    <!-- não estranha tive que fazer essa duplicação pois não estava funcionado quando clico em sair, o css-->
-    <link rel="stylesheet" href="../style/login.css">
+    <link rel="stylesheet" href="/projeto_ed_feito/style/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 
@@ -97,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email_login']) && isse
                 </div>
             </form>
 
-            <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
+            <p>Não tem conta? <a href="/projeto_ed_feito/login/cadastro.php">Cadastre-se</a></p>
         </div>
     </div>
 

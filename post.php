@@ -184,6 +184,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+    <nav>
+        <?php require __DIR__.'/sidebar/newsidebar.php' ?>
+    </nav>
     <div class="post-creator">
         <?php if (!empty($_SESSION['erros_post'])): ?>
             <div class="alert-error">

@@ -153,13 +153,13 @@
          }
  
          $_SESSION['erros_cadastro'] = $erros;
-         header("Location: cadastro.php");
+         header("Location: /projeto_ed_feito/login/cadastro.php");
          exit;
  
      } catch (Exception $e) {
          // Outros erros
          $_SESSION['erros_cadastro'] = explode("||", $e->getMessage());
-         header("Location: cadastro.php");
+         header("Location: /projeto_ed_feito/login/cadastro.php");
          exit;
  
      } finally {
@@ -176,7 +176,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="../style/cadastro.css"> <!--conectando a style -->
+    <link rel="stylesheet" href="/projeto_ed_feito/style/cadastro.css"> <!--conectando a style -->
     <style>
        
     </style>
@@ -207,7 +207,7 @@
     }
     ?>
 
-    <form method="POST" action="cadastro.php">
+    <form method="POST" action="/projeto_ed_feito/login/cadastro.php">
         <div class="form-group">
             <label for="nome_cadastrado">Nome Completo:</label>
             <input type="text" id="nome_cadastrado" name="nome_cadastrado" required>

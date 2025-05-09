@@ -23,27 +23,31 @@ try {
 
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Resultados da Busca</title>
     <link rel="stylesheet" href="style/busca.css">
 </head>
+
 <body>
-  <nav>
-    <?php include("sidebar/side-busca.php") ?>
-  </nav>
+    <nav>
+        <?php include("sidebar/side-busca.php") ?>
+        <?php //aqui e seu sideBar deixa para tirar os comentarios quando estilizar tudo.
+        //require __DIR__ . '/sidebar/newsidebar.php' ?>
+    </nav>
 
     <main class="container">
         <h1>Resultados para "<?= htmlspecialchars($_POST['User_name'] ?? '') ?>"</h1>
-        
+
         <?php if (!empty($searchResults)): ?>
             <div class="user-list">
                 <?php foreach ($searchResults as $user): ?>
                     <div class="user-card">
-                        <img src="uploads/avatars/<?= htmlspecialchars($user['avatar'] ?? 'default-avatar.jpg') ?>" 
-                             alt="Avatar" 
-                             class="profile-pic-small"
-                             onerror="this.src='uploads/avatars/default-avatar.jpg'">
+                        <img src="uploads/avatars/<?= htmlspecialchars($user['avatar'] ?? 'default-avatar.jpg') ?>"
+                            alt="Avatar"
+                            class="profile-pic-small"
+                            onerror="this.src='uploads/avatars/default-avatar.jpg'">
                         <div class="user-info">
                             <h3><?= htmlspecialchars($user['nome']) ?></h3>
                             <?php if ($user['seguindo']): ?>
@@ -67,4 +71,5 @@ try {
         <?php endif; ?>
     </main>
 </body>
+
 </html>
