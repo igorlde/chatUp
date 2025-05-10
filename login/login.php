@@ -14,7 +14,7 @@ processar_login($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | ChatUp</title>
     <!--esse daqui e de quando inicia-->
-    <link rel="stylesheet" href="/projeto_ed_feito/style/login.css">
+    <link rel="stylesheet" href="/chatup/style/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 
@@ -35,7 +35,7 @@ processar_login($conn);
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
             
-            <form action="/projeto_ed_feito/login/login.php" method="post">
+            <form action="/chatup/login/login.php" method="post">
                 <div>
                     <label for="email_login">Email</label>
                     <input type="email" name="email_login" id="email_login" required>
@@ -49,7 +49,7 @@ processar_login($conn);
                 </div>
             </form>
 
-            <p>Não tem conta? <a href="/projeto_ed_feito/login/cadastro.php">Cadastre-se</a></p>
+            <p>Não tem conta? <a href="/chatup/login/cadastro.php">Cadastre-se</a></p>
         </div>
     </div>
 

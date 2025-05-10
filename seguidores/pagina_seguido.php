@@ -11,7 +11,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $user_id = $_SESSION['usuario_id'];
 $total_seguindo = getSeguindoCount($user_id, $conn);
-$lista_seguindo = getListSeguindo($user_id, $conn); // Corrigido o nome da variável
+$lista_seguindo = getListSeguindo($user_id, $conn);
 
 // DEBUG (remova após teste)
 /*
@@ -43,14 +43,7 @@ echo "</pre>";
             <?php else: ?>
                 <?php foreach ($lista_seguindo as $perfil): ?>
                     <div class="card-seguidor">
-                        <?php
-                        // Verificação completa do caminho
-                        $imagem = (!empty($perfil['avatar']) && file_exists($perfil['avatar']))
-                            ? $perfil['avatar']
-                            : 'uploads/avatars/';
-                        ?>
-
-                        <img src="<?= htmlspecialchars($imagem) ?>"
+                        <img src="/chatup/uploads/avatars/<?= htmlspecialchars($perfil['avatar']) ?>"
                             alt="<?= htmlspecialchars($perfil['nome_usuario'] ?? 'Usuário') ?>"
                             class="avatar">
 

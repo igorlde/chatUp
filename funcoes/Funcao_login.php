@@ -8,7 +8,7 @@ function validar_campos(string $email, string $senha): void
 {
     if (empty($email) || empty($senha)) {
         $_SESSION['erro'] = 'Prencha todos os campos';
-        header("Location: /projeto_ed_feito/login/login.php");
+        header("Location: /chatup/login/login.php");
         exit;
     }
 }
@@ -35,13 +35,13 @@ function validar_senha(string $senha, ?array $usuario): void
 {
     if (!$usuario || !password_verify($senha, $usuario['senha'])) {
         $_SESSION['erro'] = 'Credenciais inválidas';
-        header("Location: /projeto_ed_feito/login/login.php");
+        header("Location: /chatup/login/login.php");
         exit;
     }
 
     $_SESSION['usuario_id'] = $usuario['id'];
     $_SESSION['nome_usuario'] = $usuario['nome_usuario'];
-    header("Location: /projeto_ed_feito/main.php");
+    header("Location: /chatup/main.php");
     exit;
 }
 /**
@@ -60,7 +60,7 @@ function processar_login(mysqli $conn)
             
         } catch (RuntimeException $e) {
             $_SESSION['erro'] = "Erro: " . $e->getMessage();
-            header("Location: /projeto_ed_feito/login/login.php");
+            header("Location: /chatup/login/login.php");
             exit;
         }
     }

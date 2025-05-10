@@ -104,7 +104,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
         if (destinatario) {
             function fetchMessages() {
                 // Corrigido: caminho absoluto para fetch_messages.php
-                fetch('/projeto_ed_feito/funcoes/fetch_messages.php?user=' + destinatario)
+                fetch('/chatup/funcoes/fetch_messages.php?user=' + destinatario)
                     .then(res => res.json())
                     .then(data => {
                         const messagesContainer = document.querySelector('.chat-menssages');
@@ -121,7 +121,7 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
                 formData.append('receiver_id', destinatario);
 
                 // Corrigido: caminho e nome do arquivo
-                fetch('/projeto_ed_feito/funcoes/send_menssage.php', {
+                fetch('/ChatUp/funcoes/send_menssage.php', {
                         method: 'POST',
                         body: formData
                     })

@@ -60,7 +60,7 @@ try {
     $stmt->execute();
 
     // Redirecionar de volta ao chat após sucesso
-    header("Location: /projeto_ed_feito/chat.php?user=" . $destinatario_id);
+    header("Location: /chatup/chat.php?user=" . $destinatario_id);
     exit;
 } catch (Exception $e) {
     $_SESSION['erro'] = "Erro ao enviar mensagem: " . $e->getMessage();

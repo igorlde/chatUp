@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
-    <link rel="stylesheet" href="/projeto_ed_feito/style/main.css">
+    <link rel="stylesheet" href="/chatup/style/main.css">
 </head>
 
 <body>
-<header>
-    <nav>
-        <h1 id="logo">ChatUp</h1>
-    </nav>
-</header>
-    
-<?php include("sidebar/newsidebar.php"); ?>
+    <header>
+        <nav>
+            <h1 id="logo">ChatUp</h1>
+        </nav>
+    </header>
+
+    <?php include("sidebar/newsidebar.php"); ?>
 
     <div class="aba-post">
         <?php if (!empty($posts)): ?>
@@ -78,31 +78,17 @@
                     <?php endif; ?>
 
                     <!--logica das curtidas dentro do main.php -->
-                    <form action="/projeto_ed_feito/funcoes/likes-functions.php" method="post">
+                    <form action="/chatup/funcoes/likes-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-curtir">
                             👍 <?= $post['curtidas'] ?? 0 ?>
                         </button>
                     </form>
                     <!--logica de deslike-->
-                    <form action="/projeto_ed_feito/funcoes/deslike-functions.php" method="post">
+                    <form action="/chatup/funcoes/deslike-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
                     </form>
-
-                    <div class="botoes-reacoes">
-    <form action="funcoes/likes-functions.php" method="post">
-        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-        <button type="submit" class="btn-curtir">
-            👍 <?= $post['curtidas'] ?? 0 ?>
-        </button>
-    </form>
-                    <!--logica de deslike-->
-                    <form action="funcoes/deslike-functions.php" method="post">
-        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-        <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
-    </form>
-</div>
 
                     <!--mostrar comentarios-->
                     <button type="button" class="btn-toggle" data-post="<?= $post['id'] ?>">Mostrar comentários</button>
@@ -128,7 +114,7 @@
 
                                             <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
                                                 <!-- função html excluir comentarios-->
-                                                <form action="/projeto_ed_feito/funcoes/excluir-comentarios.php" method="get" class="form-exclusao">
+                                                <form action="/chatup/funcoes/excluir-comentarios.php" method="get" class="form-exclusao">
                                                     <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
                                                     <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                                                     <button type="submit" class="btn-excluir"
@@ -153,7 +139,7 @@
                             <!-- Formulário original que será clonado para a área flutuante -->
                             <!-- Barra fixa para postar comentário -->
                             <!-- Barra fixa para comentar (única para toda a página) -->
-                            <form method="POST" action="/projeto_ed_feito/funcoes/comentario.php" class="form-comentario">
+                            <form method="POST" action="/chatup/funcoes/comentario.php" class="form-comentario">
                                 <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                                 <textarea name="texto" required></textarea>
                                 <button type="submit">Comentar</button>
