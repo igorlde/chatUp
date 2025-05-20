@@ -15,7 +15,7 @@ body {
 }
 
 main {
-    padding: 20px;
+    
     z-index: 1;
     padding-left: calc(82px + 20px);
 }
@@ -318,11 +318,13 @@ main {
         text-align: center;
     }
 
+   #sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
 }
-#sidebar {
-  position: fixed; 
-  top: 0;          
-  left: 0;        
-  height: 100vh;   
-  z-index: 999;    
+
 }
+

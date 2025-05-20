@@ -19,6 +19,12 @@
     margin: 0;
     padding: 0;
   }
+
+  main {
+    margin-left: 0px; /* se o sidebar expandido for maior, ajuste aqui */
+    padding: 30px;
+    min-height: 100vh;
+}
   
   body {
     font-family: Arial, sans-serif;

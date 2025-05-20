@@ -6,15 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
     <link rel="stylesheet" href="/chatup/style/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="style/newsidebar.css">
 </head>
 
 <body>
-    <header>
-        <nav>
-            <h1 id="logo">ChatUp</h1>
-        </nav>
-    </header>
-
+    
     <?php include("sidebar/newsidebar.php"); ?>
 
     <div class="aba-post">
@@ -125,6 +122,7 @@
                                             <?php endif; ?>
                                         </div>
                                     </div>
+                                </div>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <p>Nenhum comentário ainda. Seja o primeiro a comentar!</p>

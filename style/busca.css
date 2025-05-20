@@ -18,6 +18,8 @@ main.container {
     flex: 1;
     padding: 20px;
     padding-left: calc(82px + 20px); /* Alinhamento com a sidebar */
+    display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -80,6 +82,7 @@ h1 {
     background-color: #3498db;
     color: white;
     padding: 10px;
+    margin-top: 5px;
     border-radius: 8px;
     text-align: center;
     text-decoration: none;
@@ -101,21 +104,118 @@ h1 {
     margin-top: 20px;
 }
 
+.nav-busca {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.btn-voltar {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-voltar:hover {
+    background-color: #2980b9;
+}
+
+.form-busca {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 25px;
+}
+
+.input-busca {
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 6px 8px;
+    font-size: 14px;
+    width: 180px;
+}
+
+.btn-busca {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #3498db;
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+.btn-busca:hover {
+    transform: scale(1.2);
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 82px;
+    flex-shrink: 0;
+}
+
+.conteudo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 
 
-
-
+/* ----------- RESPONSIVO MOBILE ----------- */
 @media (max-width: 768px) {
     main.container {
-        padding-left: 82px; /* Para garantir o alinhamento com a sidebar */
+        padding: 20px 15px;
+    }
+
+    .nav-busca {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .form-busca {
+        justify-content: space-between;
     }
 
     .user-card {
-        width: calc(50% - 20px); /* Ajuste para telas menores */
+        width: 100%;
+        max-width: 360px;
     }
 
     .user-list {
         justify-content: center;
+    }
+
+    .user-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .action-buttons {
+        margin-top: 10px;
+        width: 100%;
     }
 
     .action-buttons a.btn-visualizar {
