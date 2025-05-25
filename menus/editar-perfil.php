@@ -5,7 +5,7 @@ require __DIR__ . "/../funcoes/editar-usuario.php";
 try {
     validar_autenticacao();
     $usuario_id = $_SESSION['usuario_id'];
-    $diretorioUploads = __DIR__ . '/uploads/avatars/';
+    $diretorioUploads = __DIR__.'/../uploads/avatars/';
     $erros = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dadosValidados = validar_dados_perfil($_POST);
@@ -19,7 +19,7 @@ try {
         );
 
         $_SESSION['sucesso'] = 'Perfil atualizado com sucesso!';
-        header("Location: main.php?id=$usuario_id");
+        header("Location: /chatup/main.php?id=$usuario_id");
         exit;
     }
 } catch (InvalidArgumentException $e) {

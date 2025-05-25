@@ -22,6 +22,7 @@
                         <h2 class="post-title"><?= htmlspecialchars($post['titulo']) ?></h2>
                         <div class="post-meta">
                             <span class="post-author"><?= htmlspecialchars($post['autor']) ?></span>
+                            
                             <span> • <?= date('d/m/Y H:i', strtotime($post['data_publicacao'])) ?></span>
                         </div>
                     </div>
@@ -96,7 +97,7 @@
                             <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
                                 <!--Div para estilizar os comentarios no mobile-->
                                 <div class="comentario mobile-column">
-                                    <img src="uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
+                                    <img src="/chatup/uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
                                         alt="<?= htmlspecialchars($comentario['autor'] ?? 'Usuário') ?>"
                                         class="avatar-comentario"> <!-- Classe mantida -->
                                     <div>

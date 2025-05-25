@@ -24,7 +24,7 @@ $lista_seguidores = getListSeguidores($user_id, $conn); // Variável corrigida
     <div class="container">
         <h1 class="titulo-principal">👥 Meus Seguidores (<?= $total_seguidores ?>)</h1>
 
-        <a href="../perfil.php?id=<?= $user_id ?>" class="botao-voltar">← Voltar ao Perfil</a>
+        <a href="javascript:history.back()" class="botao-voltar">← Voltar</a>
         <div class="lista-seguidores">
             <?php if (empty($lista_seguidores)): ?> <!-- Variável corrigida -->
                 <p class="sem-resultados">Você ainda não tem seguidores.</p>
