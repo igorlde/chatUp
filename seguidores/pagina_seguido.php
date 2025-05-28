@@ -28,14 +28,14 @@ echo "</pre>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pessoas que Sigo</title>
-    <link rel="stylesheet" href="../style/style_seguidores.css">
+    <link rel="stylesheet" href="/chatup/style/style_seguidores.css">
 </head>
 
 <body>
     <div class="container">
         <h1 class="titulo-principal">🔍 Pessoas que Sigo (<?= $total_seguindo ?>)</h1>
 
-        <a href="../perfil.php" class="botao-voltar">← Voltar ao Perfil</a>
+        <a href="javascript:history.back()" class="botao-voltar">← Voltar ao Perfil</a>
 
         <div class="lista-seguidores">
             <?php if (empty($lista_seguindo)): ?>

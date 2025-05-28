@@ -36,6 +36,14 @@ function processar_avatar(int $usuario_id, string $diretorio_uploads): string
         return '';
     }
 
+    // Garantir que o diretório termina com uma barra
+    $diretorio_uploads = rtrim($diretorio_uploads, '/') . '/';
+
+    // Verificar se o diretório existe e é gravável
+    if (!is_dir($diretorio_uploads) && !mkdir($diretorio_uploads, 0755, true)) {
+        throw new RuntimeException('Erro ao criar diretório de uploads');
+    }
+
     $arquivo = $_FILES['avatar'];
     $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
     $nomeArquivo = uniqid('avatar_') . '.' . $extensao;
@@ -51,10 +59,6 @@ function processar_avatar(int $usuario_id, string $diretorio_uploads): string
 
     if (!in_array($arquivo['type'], $tiposPermitidos)) {
         throw new RuntimeException('Formato inválido (use JPG, PNG ou WEBP)');
-    }
-
-    if (!is_dir($diretorio_uploads) && !mkdir($diretorio_uploads, 0755, true)) {
-        throw new RuntimeException('Erro ao criar diretório de uploads');
     }
 
     if (!move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto)) {
