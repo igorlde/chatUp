@@ -8,21 +8,20 @@ if (!isset($_SESSION['usuario_id'])) {
 $meu_id = $_SESSION['usuario_id'];
 $selecionar_usuario_id = isset($_GET['user']) ? (int) $_GET['user'] : null;
 
-// Correção 1: Buscar TODOS os usuários seguidos$seguidores_lista = [];
+$seguidores_lista = [];
 $stmt_seguidores = $conn->prepare("
-SELECT u.id, u.nome_usuario, u.avatar 
-FROM users u 
-JOIN seguidores f ON u.id = f.seguido_id 
-WHERE f.seguidor_id = ?
+    SELECT u.id, u.nome_usuario, u.avatar 
+    FROM users u 
+    JOIN seguidores f ON u.id = f.seguido_id 
+    WHERE f.seguidor_id = ?
 ");
-$stmt_seguidores->bind_param("i", $meu_id); // "i" = inteiro
+$stmt_seguidores->bind_param("i", $meu_id);
 $stmt_seguidores->execute();
 $result_seguidores = $stmt_seguidores->get_result();
 $seguidores_lista = $result_seguidores->fetch_all(MYSQLI_ASSOC);
-$mensagems = [];
 
+$mensagems = [];
 if ($selecionar_usuario_id) {
-    // Query para mensagens em ambas as direções
     $stmt_mensagens = $conn->prepare("
         SELECT * 
         FROM mensagens 
@@ -30,7 +29,6 @@ if ($selecionar_usuario_id) {
         OR (remetente_id = ? AND destinatario_id = ?) 
         ORDER BY data_envio ASC
     ");
-    // Vincular 4 parâmetros (dois pares de IDs)
     $stmt_mensagens->bind_param("iiii", $meu_id, $selecionar_usuario_id, $selecionar_usuario_id, $meu_id);
     $stmt_mensagens->execute();
     $result_mensagens = $stmt_mensagens->get_result();
@@ -41,30 +39,29 @@ $stmt_usuario = $conn->prepare("SELECT nome_usuario, avatar FROM users WHERE id 
 $stmt_usuario->bind_param("i", $selecionar_usuario_id);
 $stmt_usuario->execute();
 $result_usuario = $stmt_usuario->get_result();
-$conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
+$conversa_usuario = $result_usuario->fetch_assoc();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Chat</title>
     <link rel="stylesheet" href="style/chat.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="style/newsidebar.css">
+</head>
+
+<body>
 
     <?php include("sidebar/newsidebar.php"); ?>
 
-</head>
-
-<main>
-<body>
-
+    <main>
     <div class="chat-container">
         <div class="chat-sidebar">
             <h3>Mensagens</h3>
-            <a href="main.php">voltar</a>
+            <a href="main.php" class="back-button"><i class="fas fa-arrow-left"></i> Voltar</a>
             <ul class="user-list">
                 <?php foreach ($seguidores_lista as $usuario): ?>
                     <li class="user-item">
@@ -82,71 +79,68 @@ $conversa_usuario = $result_usuario->fetch_assoc(); // Apenas 1 registro
         <div class="chat-main">
             <?php if ($selecionar_usuario_id && $conversa_usuario): ?>
                 <div class="chat-header">
-                    <a href="perfil.php?id-<?= $selecionar_usuario_id ?>">
-                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? '' ?>" class="chat-avatar">
+                    <a href="perfil.php?id=<?= $selecionar_usuario_id ?>">
+                        <img src="uploads/avatars/<?= $conversa_usuario['avatar'] ?? 'default.jpg' ?>" class="chat-avatar">
                     </a>
                     <h4>@<?= htmlspecialchars($conversa_usuario['nome_usuario']) ?></h4>
                 </div>
                 <div class="chat-menssages">
                     <?php foreach ($mensagems as $msg): ?>
-                        <div class="chat-message<?= $msg['remetente_id'] == $meu_id ? 'sent' : 'destinatario' ?>">
+                        <div class="chat-message <?= $msg['remetente_id'] == $meu_id ? 'sent' : 'received' ?>">
                             <?= htmlspecialchars($msg['mensagem']) ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <form action="funcoes/send_menssage.php" method="post" class="chat-form">
+
+                <div class="chat-form">
+                <form action="funcoes/send_menssage.php" method="post">
                     <input type="hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
                     <input type="text" name="msg" placeholder="Digite sua mensagem" required>
                     <button type="submit">Enviar</button>
                 </form>
+                </div>
             <?php else: ?>
-                <p>Selecionar uma conversa no meu menu á esquerda.</p>
+                <p class="no-chat">Selecione uma conversa no menu à esquerda.</p>
             <?php endif; ?>
         </div>
     </div>
-    <script>
-        // Verifica se o parâmetro user existe
-        let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
+    </main>
 
+    <script>
+        let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
         if (destinatario) {
             function fetchMessages() {
-                // Corrigido: caminho absoluto para fetch_messages.php
                 fetch('/chatup/funcoes/fetch_messages.php?user=' + destinatario)
                     .then(res => res.json())
                     .then(data => {
                         const messagesContainer = document.querySelector('.chat-menssages');
-                        messagesContainer.innerHTML = data.html; // Campo correto: 'html'
-                        messagesContainer = messagesContainer.scrollHeight;
+                        messagesContainer.innerHTML = data.html;
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
                     });
             }
 
-            // Envia mensagem com AJAX
             document.querySelector('.chat-form').addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const formData = new FormData(this);
                 formData.append('receiver_id', destinatario);
 
-                // Corrigido: caminho e nome do arquivo
-                fetch('/ChatUp/funcoes/send_menssage.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            this.reset();
-                            fetchMessages();
-                        }
-                    });
+                fetch('/chatup/funcoes/send_menssage.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.reset();
+                        fetchMessages();
+                    }
+                });
             });
 
-            // Atualiza mensagens a cada 2 segundos
-            setInterval(fetchMessages, 500);
+            setInterval(fetchMessages, 2000);
             fetchMessages();
         }
     </script>
 </body>
-</main>
 
 </html>
