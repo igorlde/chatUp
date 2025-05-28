@@ -18,11 +18,10 @@ processarPostagem(
     <title>Criar Post</title>
     <link rel="stylesheet" href="style/post.css?v=2">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="style/newsidebar.css">
+
 </head>
 
 <body>
-    <div class="layout">
         <div class="sidebar">
             <?php require __DIR__ . '/sidebar/newsidebar.php'; ?>
         </div>
@@ -103,7 +102,7 @@ processarPostagem(
                     <button type="submit" class="btn-primary">Publicar Post</button>
                 </form>
             </div>
-        </div>
+  
 
         <script>
             const tagsInput = document.getElementById('tagsInput');

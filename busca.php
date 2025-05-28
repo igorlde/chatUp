@@ -30,11 +30,9 @@ try {
     <title>Resultados da Busca</title>
     <link rel="stylesheet" href="style/busca.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="style/newsidebar.css">
 </head>
 
 <body>
-  <div class="layout">
     <?php include("sidebar/newsidebar.php"); ?>
 
 
@@ -78,7 +76,6 @@ try {
           <?php endif; ?>
       </main>
     </div>
-  </div>
 </body>
 
 </html>

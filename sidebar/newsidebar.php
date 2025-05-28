@@ -19,6 +19,7 @@ try {
     die("Erro ao buscar dados do usuário: " . $e->getMessage());
 }
 ?>
+    <link rel="stylesheet" href="style/newsidebar.css">
     <nav id="sidebar">
         <div id="sidebar-content">
            
