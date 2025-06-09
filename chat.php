@@ -92,7 +92,7 @@ $conversa_usuario = $result_usuario->fetch_assoc();
                 </div>
 
                 <div class="chat-form">
-                <form action="chatup/funcoes/send_menssage.php" method="post">
+                <form action="chatUp/funcoes/send_menssage.php" method="post">
                     <input type="hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
                     <input type="text" name="msg" placeholder="Digite sua mensagem" required>
                     <button type="submit">Enviar</button>
@@ -109,7 +109,7 @@ $conversa_usuario = $result_usuario->fetch_assoc();
         let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
         if (destinatario) {
     function fetchMessages() {
-        fetch('/chatup/funcoes/fetch_messages.php?user=' + destinatario)
+        fetch('/chatUp/funcoes/fetch_messages.php?user=' + destinatario)
             .then(res => res.json())
             .then(data => {
                 const messagesContainer = document.querySelector('.chat-menssages');
@@ -123,7 +123,7 @@ $conversa_usuario = $result_usuario->fetch_assoc();
         const formData = new FormData(this);
         formData.append('receiver_id', destinatario);
 
-        fetch('/chatup/funcoes/send_menssage.php', {
+        fetch('/chatUp/funcoes/send_menssage.php', {
             method: 'POST',
             body: formData
         })

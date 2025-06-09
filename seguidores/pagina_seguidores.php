@@ -31,7 +31,7 @@ $lista_seguidores = getListSeguidores($user_id, $conn); // Variável corrigida
             <?php else: ?>
                 <?php foreach ($lista_seguidores as $seguidor): ?> <!-- Variável corrigida -->
                     <div class="card-seguidor">
-                        <img src="/chatup/uploads/avatars/<?= htmlspecialchars($seguidor['avatar']) ?>"
+                        <img src="/chatUp/uploads/avatars/<?= htmlspecialchars($seguidor['avatar']) ?>"
                             alt="<?= htmlspecialchars($seguidor['nome_usuario'] ?? 'Usuário sem nome') ?>"
                             class="avatar">
                         <div class="info">

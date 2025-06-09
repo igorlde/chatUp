@@ -28,7 +28,7 @@ echo "</pre>";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pessoas que Sigo</title>
-    <link rel="stylesheet" href="/chatup/style/style_seguidores.css">
+    <link rel="stylesheet" href="/chatUp/style/style_seguidores.css">
 </head>
 
 <body>
@@ -43,7 +43,7 @@ echo "</pre>";
             <?php else: ?>
                 <?php foreach ($lista_seguindo as $perfil): ?>
                     <div class="card-seguidor">
-                        <img src="/chatup/uploads/avatars/<?= htmlspecialchars($perfil['avatar']) ?>"
+                        <img src="/chatUp/uploads/avatars/<?= htmlspecialchars($perfil['avatar']) ?>"
                             alt="<?= htmlspecialchars($perfil['nome_usuario'] ?? 'Usuário') ?>"
                             class="avatar">
 

@@ -1,15 +1,16 @@
 <?php
-    $localhost = "localhost";
-    $usuario = "root";
-    $senha = "G!9fLx@82_Tz%kR";
-    $banco = "banco_chatUp";
-    $porta = 3306;
+   $host = "127.0.0.1";
+$port = 3306;
+$user = "root";
+$pass = "654321$#@---";
+$db = "banco_chatUp";
 
     // Habilitar erros
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     try {
-        $conn = new mysqli($localhost, $usuario, $senha, $banco, $porta);
+    
+$conn = new mysqli($host, $user, $pass, $db, $port);
         $conn->set_charset("utf8mb4");
 
         // Verificação extra de conexão
@@ -19,4 +20,5 @@
     } catch (Exception $e) {
         die("ERRO DE CONEXÃO: " . $e->getMessage());
     }
+
 

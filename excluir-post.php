@@ -90,7 +90,7 @@ try {
         if (file_exists($caminho)) {
             unlink($caminho);
             // echo "Arquivo deletado: $caminho<br>";
-            header("Location: /chatup/main.php");
+            header("Location: /chatUp/main.php");
             exit;
         } else {
             echo "Arquivo não encontrado: $caminho<br>";

@@ -22,7 +22,7 @@
     <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label>Foto do Perfil:</label><br>
-            <img src="/chatup/uploads/avatars/<?= htmlspecialchars($usuario['avatar'] ?? 'default.jpg') ?>" 
+            <img src="/chatUp/uploads/avatars/<?= htmlspecialchars($usuario['avatar'] ?? 'default.jpg') ?>" 
                  class="avatar-preview"
                  alt="Preview do avatar">
             <input type="file" name="avatar" accept="image/*">
