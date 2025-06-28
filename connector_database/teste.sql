@@ -1,5 +1,7 @@
 CREATE DATABASE banco_chatUp;
 
+USE banco_chatUp;
+
 -- Remova todas as tabelas na ordem correta
 DROP TABLE IF EXISTS bloco_de_notas;
 DROP TABLE IF EXISTS categorias;
