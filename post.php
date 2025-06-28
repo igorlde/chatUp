@@ -26,6 +26,7 @@ processarPostagem(
             <?php require __DIR__ . '/sidebar/newsidebar.php'; ?>
         </div>
 
+          <div class="layout"> <!-- Adicione esta div -->
         <div class="main-content">
 
             <div class="post-creator">
