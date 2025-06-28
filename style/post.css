@@ -7,7 +7,6 @@
     box-sizing: border-box;
 }
 
-/* Body sem flex */
 body {
     background-color: #f9f9f9;
     font-family: 'Arial', sans-serif;
@@ -23,16 +22,13 @@ body {
     min-height: 100vh;
 }
 
-
-/* Conteúdo principal */
 .main-content {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-
-        padding: 40px;
-    
+    margin-left: 82px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
 }
 
 /* Container do post */
@@ -53,7 +49,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Estilização das mensagens de erro */
+/* Mensagens */
 .alert-error {
     background-color: rgba(0, 0, 0, 0.1);
     border-left: 4px solid #c0392b;
@@ -61,33 +57,39 @@ body {
     margin-bottom: 20px;
     border-radius: 4px;
 }
-
 .alert-error p {
     color: #c0392b;
     font-size: 0.9rem;
 }
 
-/* Agrupamento de cada campo de formulário */
+.alert-success {
+    background-color: rgba(46, 204, 113, 0.2);
+    border-left: 4px solid #2ecc71;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    color: #2ecc71;
+    font-size: 0.9rem;
+}
+
+/* Agrupamento de campo */
 .form-group {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
 }
 
-/* Rótulo dos campos */
 .form-group label {
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-/* Notas explicativas */
 .form-note {
     font-size: 0.8rem;
     color: #666;
     margin-top: 5px;
 }
 
-/* Campos de entrada */
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="file"],
@@ -108,13 +110,12 @@ body {
     border-color: rgba(52, 152, 219, 0.2);
 }
 
-/* Textarea */
 textarea {
     min-height: 120px;
     resize: vertical;
 }
 
-/* Seção de tags */
+/* Tags */
 .tags-input {
     display: flex;
     flex-direction: column;
@@ -139,7 +140,6 @@ textarea {
     gap: 10px;
 }
 
-/* Tag individual */
 .tag {
     background-color: rgba(52, 152, 219, 0.2);
     padding: 5px 10px;
@@ -155,7 +155,7 @@ textarea {
     cursor: pointer;
 }
 
-/* Botão */
+/* Botão principal */
 button.btn-primary {
     background-color: rgba(52, 152, 219, 0.2);
     border: none;
@@ -175,12 +175,75 @@ button.btn-primary:hover {
     color: #fff;
 }
 
+/* Upload de arquivos customizado */
+.custom-file {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+}
+
+.custom-file input[type="file"] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.custom-file label {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.custom-file label:hover {
+    background-color: #2980b9;
+}
+
+.file-label.selected {
+    background-color: #2ecc71;
+}
+
+.file-label.selected::after {
+    content: " ✔ Arquivo Selecionado";
+}
+
+/* Preview */
+.preview-wrapper {
+    margin-top: 10px;
+}
+
+.preview-wrapper img,
+.preview-wrapper video {
+    max-width: 100%;
+    height: auto;
+    margin-top: 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Contador de caracteres */
+.char-counter {
+    font-size: 0.8rem;
+    text-align: right;
+    color: #888;
+    margin-top: 5px;
+}
+
 /* Responsividade */
 @media (max-width: 1024px) {
     .main-content {
         padding: 20px;
     }
-    
+
     .post-creator {
         padding: 20px;
         max-width: 600px;
@@ -193,39 +256,54 @@ button.btn-primary:hover {
     }
 
     .main-content {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 20px;
+        padding-bottom: 280px;
+        height: auto;
+        min-height: 100vh;
+        margin-left: 0;
+    }
+
+    .post-creator {
+        padding: 20px;
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 0.95rem;
+    }
+
+    .btn-primary {
+        font-size: 1rem;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
         padding: 15px;
+        padding-bottom: 300px;
     }
 
     .post-creator {
         padding: 15px;
         max-width: 100%;
+    }
+
+    .post-creator h1 {
+        font-size: 1.5rem;
+        text-align: center;
     }
 
     .form-group input,
     .form-group textarea,
     .form-group select {
         font-size: 0.9rem;
-    }
-
-    .btn-primary {
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .post-creator {
-        padding: 10px;
-        max-width: 100%;
-    }
-
-    .post-creator h1 {
-        font-size: 1.5rem;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-        font-size: 0.85rem;
     }
 
     .btn-primary {
