@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (!empty($erros)) {
         $_SESSION['erros_cadastro'] = $erros;
-        header("Location: /chatup/login/cadastro.php");
+        header("Location: /chatUp/login/cadastro.php");
         exit;
     }
 
@@ -111,11 +111,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $_SESSION['erros_cadastro'][] = "Erro no banco de dados: $errorMessage";
         }
-        header("Location: /chatup/login/cadastro.php");
+        header("Location: /chatUp/login/cadastro.php");
         exit;
     } catch (Exception $e) {
         $_SESSION['erros_cadastro'][] = "Erro: " . $e->getMessage();
-        header("Location: /chatup/login/cadastro.php");
+        header("Location: /chatUp/login/cadastro.php");
         exit;
     } finally {
         if (isset($stmt)) $stmt->close();
@@ -132,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
-    <link rel="stylesheet" href="/chatup/style/cadastro.css"> <!--conectando a style -->
+    <link rel="stylesheet" href="/chatUp/style/cadastro.css"> <!--conectando a style -->
     <style>
 
     </style>
@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <div class="logo-container">
-        <h1>ChatUp</h1>
+        <h1>chatUp</h1>
     </div>
 
     <h1 class="h1-cadastro">Cadastro de Usuário</h1>
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     ?>
 
-    <form method="POST" action="/chatup/login/cadastro.php">
+    <form method="POST" action="/chatUp/login/cadastro.php">
         <div class="form-group">
             <label for="nome_cadastrado">Nome Completo:</label>
             <input type="text" id="nome_cadastrado" name="nome_cadastrado" required>

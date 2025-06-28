@@ -5,7 +5,13 @@ require __DIR__ . "/../funcoes/editar-usuario.php";
 try {
     validar_autenticacao();
     $usuario_id = $_SESSION['usuario_id'];
-    $diretorioUploads = __DIR__.'/../uploads/avatars/';
+    $uploadsBase = realpath(__DIR__ . '/../uploads');
+if ($uploadsBase === false) {
+    throw new RuntimeException('Diretório base de uploads não existe');
+}
+$diretorioUploads = $uploadsBase . '/avatars';
+
+
     $erros = [];
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $dadosValidados = validar_dados_perfil($_POST);
@@ -19,7 +25,7 @@ try {
         );
 
         $_SESSION['sucesso'] = 'Perfil atualizado com sucesso!';
-        header("Location: /chatup/main.php?id=$usuario_id");
+        header("Location: /chatUp/main.php?id=$usuario_id");
         exit;
     }
 } catch (InvalidArgumentException $e) {

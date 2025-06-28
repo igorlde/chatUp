@@ -1,0 +1,17 @@
+<?php
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+$host = "127.0.0.1";
+$port = 3306;
+$user = "root";
+$pass = "654321$#@---";
+$db = "banco_chatUp";
+
+try {
+    $conn = new mysqli($host, $user, $pass, $db, $port);
+    $conn->set_charset("utf8mb4");
+    echo "Conectado com sucesso!";
+} catch (mysqli_sql_exception $e) {
+    echo "Erro na conexão: " . $e->getMessage();
+}
+?>

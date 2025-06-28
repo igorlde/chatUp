@@ -12,20 +12,20 @@ processar_login($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | ChatUp</title>
+    <title>Login | chatUp</title>
     <!--esse daqui e de quando inicia-->
-    <link rel="stylesheet" href="/chatup/style/login.css">
+    <link rel="stylesheet" href="/chatUp/style/login.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <div class="container-login">
         <div class="sidebar">
-            <h1 class="logo-text">ChatUp</h1>
+            <h1 class="logo-text">chatUp</h1>
             <div class="frases">
                 <span class="frase ativa">Publique fotos e vídeos</span>
                 <span class="frase">Troque mensagens com seus amigos</span>
-                <span class="frase">Divirta-se no ChatUp</span>
+                <span class="frase">Divirta-se no chatUp</span>
             </div>
         </div>
 
@@ -35,7 +35,7 @@ processar_login($conn);
                 <?php unset($_SESSION['erro']); ?>
             <?php endif; ?>
             
-            <form action="/chatup/login/login.php" method="post">
+            <form action="/chatUp/login/login.php" method="post">
                 <div>
                     <label for="email_login">Email</label>
                     <input type="email" name="email_login" id="email_login" required>
@@ -49,7 +49,7 @@ processar_login($conn);
                 </div>
             </form>
 
-            <p>Não tem conta? <a href="/chatup/login/cadastro.php">Cadastre-se</a></p>
+            <p>Não tem conta? <a href="/chatUp/login/cadastro.php">Cadastre-se</a></p>
         </div>
     </div>
 

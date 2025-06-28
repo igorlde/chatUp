@@ -86,7 +86,7 @@ if (!$perfilUser) {
 
 <main>
 
-<h1 id="logo">ChatUp</h1>
+<h1 id="logo">chatUp</h1>
 
 <div class="perfil-header">
     <img src="uploads/avatars/<?= $perfilUser['avatar'] ?>" class="profile-pic-large">

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web_principal_chatUp</title>
-    <link rel="stylesheet" href="/chatup/style/main.css">
+    <link rel="stylesheet" href="/chatUp/style/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="style/newsidebar.css">
 </head>
@@ -76,14 +76,14 @@
                     <?php endif; ?>
 
                     <!--logica das curtidas dentro do main.php -->
-                    <form action="/chatup/funcoes/likes-functions.php" method="post">
+                    <form action="/chatUp/funcoes/likes-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-curtir">
                             👍 <?= $post['curtidas'] ?? 0 ?>
                         </button>
                     </form>
                     <!--logica de deslike-->
-                    <form action="/chatup/funcoes/deslike-functions.php" method="post">
+                    <form action="/chatUp/funcoes/deslike-functions.php" method="post">
                         <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                         <button type="submit" class="btn-dislike">👎 <?= $post['descurtidas'] ?? 0 ?></button>
                     </form>
@@ -97,7 +97,7 @@
                             <?php foreach ($comentariosPorPost[$post['id']] as $comentario): ?>
                                 <!--Div para estilizar os comentarios no mobile-->
                                 <div class="comentario mobile-column">
-                                    <img src="/chatup/uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
+                                    <img src="/chatUp/uploads/avatars/<?= htmlspecialchars($comentario['autor_avatar'] ?? 'default-avatar.jpg') ?>"
                                         alt="<?= htmlspecialchars($comentario['autor'] ?? 'Usuário') ?>"
                                         class="avatar-comentario"> <!-- Classe mantida -->
                                     <div>
@@ -112,7 +112,7 @@
 
                                             <?php if ($comentario['usuario_id'] == $_SESSION['usuario_id'] || $post['usuario_id'] == $_SESSION['usuario_id']): ?>
                                                 <!-- função html excluir comentarios-->
-                                                <form action="/chatup/funcoes/excluir-comentarios.php" method="get" class="form-exclusao">
+                                                <form action="/chatUp/funcoes/excluir-comentarios.php" method="get" class="form-exclusao">
                                                     <input type="hidden" name="id" value="<?= $comentario['id'] ?>">
                                                     <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                                                     <button type="submit" class="btn-excluir"
@@ -138,7 +138,7 @@
                             <!-- Formulário original que será clonado para a área flutuante -->
                             <!-- Barra fixa para postar comentário -->
                             <!-- Barra fixa para comentar (única para toda a página) -->
-                            <form method="POST" action="/chatup/funcoes/comentario.php" class="form-comentario">
+                            <form method="POST" action="/chatUp/funcoes/comentario.php" class="form-comentario">
                                 <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
                                 <textarea name="texto" required></textarea>
                                 <button type="submit">Comentar</button>

@@ -83,7 +83,8 @@ $conversa_usuario = $result_usuario->fetch_assoc();
                     </a>
                     <h4>@<?= htmlspecialchars($conversa_usuario['nome_usuario']) ?></h4>
                 </div>
-                <div class="chat-menssages">
+                <!-- CORRIGIDO: classe correta -->
+                <div class="chat-messages">
                     <?php foreach ($mensagems as $msg): ?>
                         <div class="chat-message <?= $msg['remetente_id'] == $meu_id ? 'sent' : 'received' ?>">
                             <?= htmlspecialchars($msg['mensagem']) ?>
@@ -92,7 +93,7 @@ $conversa_usuario = $result_usuario->fetch_assoc();
                 </div>
 
                 <div class="chat-form">
-                <form action="chatup/funcoes/send_menssage.php" method="post">
+                <form action="chatUp/funcoes/send_menssage.php" method="post">
                     <input type="hidden" name="receiver_id" value="<?= $selecionar_usuario_id ?>">
                     <input type="text" name="msg" placeholder="Digite sua mensagem" required>
                     <button type="submit">Enviar</button>
@@ -108,38 +109,42 @@ $conversa_usuario = $result_usuario->fetch_assoc();
     <script>
         let destinatario = <?php echo isset($_GET['user']) ? (int)$_GET['user'] : 'null'; ?>;
         if (destinatario) {
-    function fetchMessages() {
-        fetch('/chatup/funcoes/fetch_messages.php?user=' + destinatario)
-            .then(res => res.json())
-            .then(data => {
-                const messagesContainer = document.querySelector('.chat-menssages');
-                messagesContainer.innerHTML = data.html;
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            });
-    }
-
-    document.querySelector('.chat-form form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        formData.append('receiver_id', destinatario);
-
-        fetch('/chatup/funcoes/send_menssage.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
+          function fetchMessages() {
+    fetch('/chatUp/funcoes/fetch_messages.php?user=' + destinatario)
+        .then(res => res.json())
         .then(data => {
-            if (data.success) {
-                this.reset();
-                fetchMessages();
+            const messagesContainer = document.querySelector('.chat-messages');
+            const isAtBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer.clientHeight + 50;
+
+            messagesContainer.innerHTML = data.html;
+            if (isAtBottom) {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         });
-    });
-
-    setInterval(fetchMessages, 2000);
-    fetchMessages();
 }
 
+
+            document.querySelector('.chat-form form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('receiver_id', destinatario);
+
+                fetch('/chatUp/funcoes/send_menssage.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.reset();
+                        fetchMessages();
+                    }
+                });
+            });
+
+            setInterval(fetchMessages, 2000);
+            fetchMessages();
+        }
     </script>
 </body>
 

@@ -1,8 +1,8 @@
 <?php
-    $localhost = "localhost";
+    $localhost = "127.0.0.1";
     $usuario = "root";
     $senha = "";
-    $banco = "banco_chatUp";
+    $banco = "chatUp";
     $porta = 3306;
 
     // Habilitar erros
@@ -19,4 +19,4 @@
     } catch (Exception $e) {
         die("ERRO DE CONEXÃO: " . $e->getMessage());
     }
-
+>?
