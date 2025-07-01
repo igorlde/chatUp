@@ -1,8 +1,8 @@
 <?php
     $localhost = "127.0.0.1";
     $usuario = "root";
-    $senha = "";
-    $banco = "chatUp";
+    $senha = "654321$#@---";
+    $banco = "banco_chatUp";
     $porta = 3306;
 
     // Habilitar erros

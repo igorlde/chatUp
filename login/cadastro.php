@@ -36,10 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($dados['nome_usuario'])) {
         $erros[] = "Nome de usuário obrigatório";
-    } elseif (!preg_match('/^[a-z0-9_]{4,20}$/', $dados['nome_usuario'])) {
-        $erros[] = "Nome de usuário inválido (a-z, 0-9, _)";
     }
-
     if (empty($dados['email'])) {
         $erros[] = "Email obrigatório";
     } elseif (!filter_var($dados['email'], FILTER_VALIDATE_EMAIL)) {
