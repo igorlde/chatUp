@@ -108,7 +108,14 @@ try {
             <li class="side-item">
                 <a href="/chatUp/static/apresentacao.pdf">
                 <span class="item-description">
-                    apresentacao
+                    Apresentação
+                </span>
+                </a>
+            </li>
+            <li class="side-item">
+                <a href="/chatUp/static/luiz.png">
+                <span class="item-description">
+                    Colaboradores
                 </span>
                 </a>
             </li>
