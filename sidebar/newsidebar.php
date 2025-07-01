@@ -104,8 +104,17 @@ try {
             <button id="open-btn">
                 <i id="open-btn-icon" class="fa-solid fa-chevron-right"></i>
             </button>
+
+            <li class="side-item">
+                <a href="/chatUp/static/apresentacao.pdf">
+                <span class="item-description">
+                    apresentacao
+                </span>
+                </a>
+            </li>
         </div>
 
+          
         <div id="logout">
             <button id="logout-btn">
             <a href="index.php">
@@ -114,7 +123,10 @@ try {
                         Sair
                     </span></a>
             </button>
+    
         </div>
+   
+     
     </nav>
 
     <script src="js/script.js"></script>

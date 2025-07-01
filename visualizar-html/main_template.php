@@ -14,9 +14,11 @@
     
     <?php include("sidebar/newsidebar.php"); ?>
 
+    
     <div class="aba-post">
         <?php if (!empty($posts)): ?>
             <?php foreach ($posts as $post): ?>
+                
                 <article class="post-card" id="post-<?= $post['id'] ?>">
                     <div class="post-header">
                         <h2 class="post-title"><?= htmlspecialchars($post['titulo']) ?></h2>
